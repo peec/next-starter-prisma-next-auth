@@ -3,6 +3,8 @@ import { authorized } from "@/auth";
 export default async function Page() {
   const { session, user, can } = await authorized();
 
+  const canCreateComments = can("create", "comment");
+
   return (
     <div className="container">
       {user.role ? (
@@ -15,7 +17,7 @@ export default async function Page() {
       ) : (
         <p className="text-red-800">You are NOT super admin</p>
       )}
-      {can("create", "comment") ? (
+      {canCreateComments ? (
         <p className="text-green-800">You are allowed to create comments</p>
       ) : (
         <p className="text-red-800">You are NOT allowed to create comments</p>
