@@ -1,28 +1,31 @@
-import { authorized } from "@/auth";
+import { authenticated } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { addOrganization } from "@/app/dashboard/actions";
 
 export default async function Page() {
-  const { session, user, can } = await authorized();
+  const { session, user } = await authenticated();
 
-  const canCreateComments = can("create", "comment");
+  // @todo use cookie here for preference or a global settings for user in db
+  const organization = await prisma.organization.findFirst({
+    where: {
+      organizationMembers: {
+        every: {
+          userId: user.id,
+        },
+      },
+    },
+  });
+
+  if (organization) {
+    redirect(`/dashboard/${organization.slug}`);
+  } else {
+    const org = await addOrganization("Default");
+    redirect(`/dashboard/${org.slug}`);
+  }
 
   return (
-    <div className="container">
-      {user.role ? (
-        <p className="text-green-800">Your account has role {user.role.name}</p>
-      ) : (
-        <p className="text-red-800">You account does not have any role</p>
-      )}
-      {user.role?.isSuperAdmin ? (
-        <p className="text-green-800">You are super admin</p>
-      ) : (
-        <p className="text-red-800">You are NOT super admin</p>
-      )}
-      {canCreateComments ? (
-        <p className="text-green-800">You are allowed to create comments</p>
-      ) : (
-        <p className="text-red-800">You are NOT allowed to create comments</p>
-      )}
-
+    <div>
       <pre>{JSON.stringify({ user, session }, null, 4)}</pre>
     </div>
   );

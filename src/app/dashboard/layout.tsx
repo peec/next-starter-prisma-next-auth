@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import SignOut from "@/components/auth/SignOut";
-import { authorized } from "@/auth";
+import { authenticated } from "@/auth";
 
 export default async function Layout({ children }: { children: ReactNode }) {
-  await authorized();
+  await authenticated();
   return (
     <div>
       <SignOut />

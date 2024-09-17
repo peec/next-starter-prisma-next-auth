@@ -1,4 +1,4 @@
-## Nextjs starter with next-auth 5 and authentication and auhtorization
+## Nextjs SaaS starter with next-auth 5 and authentication and auhtorization for SaaS
 
 A basic setup with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
 
@@ -9,6 +9,7 @@ A basic setup with prisma, next-auth@5, nextjs 14.x for authentication and autho
   - JWT 
   - custom method for redirection to login based on authorization.
   - Due to the nextjs still only having edge runtime in the middleware (WTF?!).. This repo does not run any prisma in the middleware (edge), which mean auhtorization is done on each page or in layout with  `await authorize()`
+- Shadcn forms (react-hook-form)
 
 Basic setup:
 

@@ -4,6 +4,7 @@ import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { OrganizationMemberRole } from "@prisma/client";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -23,7 +24,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
  * - user object (from db)
  * - can() method that can be used for fine-grained permission checking or just if the user has a role and role is super admin.
  */
-export async function authorized() {
+export async function authenticated() {
   const session = await auth();
 
   if (!session?.user) {
@@ -38,37 +39,42 @@ export async function authorized() {
     redirect("/api/auth/signin?callbackUrl=/dashboard");
   }
 
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { email: session.user.email },
-    include: {
-      role: {
-        include: {
-          permissions: {
-            include: {
-              permission: true,
-            },
+  });
+  if (!user) {
+    redirect("/api/auth/signin?callbackUrl=/dashboard");
+  }
+
+  return { session, user };
+}
+
+export async function authorizedOrganization(
+  organizationSlug: string,
+  requiredRole?: OrganizationMemberRole,
+) {
+  const auth = await authenticated();
+
+  const organization = await prisma.organization.findFirst({
+    where: {
+      AND: {
+        slug: organizationSlug,
+        organizationMembers: {
+          some: {
+            userId: auth.user.id,
+            role: requiredRole,
           },
         },
       },
     },
   });
 
-  function can(
-    action: "create" | "read" | "update" | "delete",
-    resource: string,
-  ) {
-    if (user.role?.isSuperAdmin) {
-      return true;
-    }
-
-    return (
-      user.role?.permissions?.some(
-        (perm) =>
-          perm.permission.action === action &&
-          perm.permission.resource === resource,
-      ) || false
-    );
+  if (!organization) {
+    redirect(`/error/no-access?org=${organizationSlug}`);
   }
 
-  return { session, user, can };
+  return {
+    organization,
+    ...auth,
+  };
 }

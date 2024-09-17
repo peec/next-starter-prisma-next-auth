@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "OrganizationMemberRole" AS ENUM ('OWNER', 'MEMBER');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -8,36 +11,8 @@ CREATE TABLE "User" (
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "roleId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Role" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "isSuperAdmin" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Permission" (
-    "id" TEXT NOT NULL,
-    "action" TEXT NOT NULL,
-    "resource" TEXT NOT NULL,
-
-    CONSTRAINT "Permission_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "RolePermission" (
-    "id" TEXT NOT NULL,
-    "roleId" TEXT NOT NULL,
-    "permissionId" TEXT NOT NULL,
-
-    CONSTRAINT "RolePermission_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -91,11 +66,50 @@ CREATE TABLE "Authenticator" (
     CONSTRAINT "Authenticator_pkey" PRIMARY KEY ("userId","credentialID")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+-- CreateTable
+CREATE TABLE "OrganizationSubscription" (
+    "id" TEXT NOT NULL,
+    "price_id" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "period_ends_at" TIMESTAMP(6) NOT NULL,
+
+    CONSTRAINT "OrganizationSubscription_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Organization" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "slug" VARCHAR(50) NOT NULL,
+    "ownerId" TEXT NOT NULL,
+    "customerId" INTEGER,
+    "subscriptionId" TEXT,
+
+    CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OrganizationMember" (
+    "id" TEXT NOT NULL,
+    "orgId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "role" "OrganizationMemberRole" NOT NULL DEFAULT 'OWNER',
+
+    CONSTRAINT "OrganizationMember_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "OrganizationInvite" (
+    "id" TEXT NOT NULL,
+    "orgId" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "role" "OrganizationMemberRole" NOT NULL DEFAULT 'MEMBER',
+
+    CONSTRAINT "OrganizationInvite_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
@@ -103,14 +117,14 @@ CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
 -- CreateIndex
 CREATE UNIQUE INDEX "Authenticator_credentialID_key" ON "Authenticator"("credentialID");
 
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "OrganizationSubscription_id_key" ON "OrganizationSubscription"("id");
 
--- AddForeignKey
-ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Organization_slug_key" ON "Organization"("slug");
 
--- AddForeignKey
-ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_permissionId_fkey" FOREIGN KEY ("permissionId") REFERENCES "Permission"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Organization_customerId_key" ON "Organization"("customerId");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -120,3 +134,18 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Authenticator" ADD CONSTRAINT "Authenticator_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Organization" ADD CONSTRAINT "Organization_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Organization" ADD CONSTRAINT "Organization_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "OrganizationSubscription"("id") ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "OrganizationMember" ADD CONSTRAINT "OrganizationMember_orgId_fkey" FOREIGN KEY ("orgId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "OrganizationMember" ADD CONSTRAINT "OrganizationMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "OrganizationInvite" ADD CONSTRAINT "OrganizationInvite_orgId_fkey" FOREIGN KEY ("orgId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE NO ACTION;

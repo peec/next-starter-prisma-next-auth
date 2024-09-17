@@ -22,31 +22,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  role   Role?   @relation(fields: [roleId], references: [id])
-  roleId String?
-}
-
-model Role {
-  id           String           @id @default(cuid())
-  name         String           @unique
-  user         User[]
-  isSuperAdmin Boolean          @default(false)
-  permissions  RolePermission[]
-}
-
-model Permission {
-  id              String           @id @default(cuid())
-  action          String // e.g., "edit", "delete"
-  resource        String // e.g., "news-item", "comment"
-  rolePermissions RolePermission[]
-}
-
-model RolePermission {
-  id           String     @id @default(cuid())
-  role         Role       @relation(fields: [roleId], references: [id])
-  roleId       String
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId String
+  organizations       Organization[]
+  organizationMembers OrganizationMember[]
 }
 
 model Account {
@@ -88,7 +65,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -102,4 +78,47 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model OrganizationSubscription {
+  id             String         @id @unique
+  price_id       String
+  status         String
+  period_ends_at DateTime       @db.Timestamp(6)
+  organization   Organization[]
+}
+
+model Organization {
+  id                  String                    @id @default(cuid())
+  name                String                    @db.VarChar(50)
+  slug                String                    @unique @db.VarChar(50)
+  ownerId             String
+  customerId          Int?                      @unique
+  subscriptionId      String?
+  user                User                      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  subscription        OrganizationSubscription? @relation(fields: [subscriptionId], references: [id], onUpdate: NoAction)
+  organizationMembers OrganizationMember[]
+  invites             OrganizationInvite[]
+}
+
+model OrganizationMember {
+  id           String                 @id @default(cuid())
+  orgId        String
+  userId       String
+  role         OrganizationMemberRole @default(OWNER)
+  organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
+  user         User                   @relation(fields: [userId], references: [id], onUpdate: NoAction)
+}
+
+enum OrganizationMemberRole {
+  OWNER
+  MEMBER
+}
+
+model OrganizationInvite {
+  id           String                 @id @default(cuid())
+  orgId        String
+  email        String
+  role         OrganizationMemberRole @default(MEMBER)
+  organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
 }
