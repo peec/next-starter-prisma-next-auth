@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -34,6 +36,8 @@ import {
 } from "@/components/organization/members/form";
 import { Organization } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { PlusCircle } from "lucide-react";
 
 export default function InviteMemberForm({
   inviteMember,
@@ -42,9 +46,9 @@ export default function InviteMemberForm({
   inviteMember: InviteHandler;
   organization: Organization;
 }) {
+  const { toast } = useToast();
   const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // 1. Define your form.
   const form = useForm<z.infer<typeof inviteMemberFormSchema>>({
     resolver: zodResolver(inviteMemberFormSchema),
     defaultValues: {
@@ -52,22 +56,28 @@ export default function InviteMemberForm({
       role: "MEMBER",
     },
   });
-
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof inviteMemberFormSchema>) {
     const result = await inviteMember(organization, values);
     if (result.success) {
       setIsDialogOpen(false);
       router.refresh();
     } else {
-      // @todo
+      toast({
+        variant: "destructive",
+        description: result.error,
+      });
     }
   }
   return (
     <div className="flex justify-between items-center mb-4">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button>Invite New User</Button>
+          <Button className="h-8 gap-1">
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Invite member
+            </span>
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <Form {...form}>

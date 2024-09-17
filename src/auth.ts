@@ -24,11 +24,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
  * - user object (from db)
  * - can() method that can be used for fine-grained permission checking or just if the user has a role and role is super admin.
  */
-export async function authenticated() {
+export async function authenticated({
+  callbackUrl,
+}: {
+  callbackUrl?: string;
+} = {}) {
   const session = await auth();
 
+  const redirectTo = "/api/auth/signin?callbackUrl=" + callbackUrl;
   if (!session?.user) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
+    redirect(redirectTo);
   }
 
   if (!session?.user?.email) {
@@ -36,14 +41,14 @@ export async function authenticated() {
       `session.user as no email, wrong scope from provider? must have access to email`,
       session.user,
     );
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
+    redirect(redirectTo);
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
   });
   if (!user) {
-    redirect("/api/auth/signin?callbackUrl=/dashboard");
+    redirect(redirectTo);
   }
 
   return { session, user };
@@ -55,14 +60,26 @@ export async function authorizedOrganization(
 ) {
   const auth = await authenticated();
 
+  const organizationMember = await prisma.organizationMember.findFirst({
+    where: {
+      userId: auth.user.id,
+      organization: {
+        slug: organizationSlug,
+      },
+    },
+  });
+
+  if (!organizationMember) {
+    redirect(`/error/no-access?org=${organizationSlug}`);
+  }
+
   const organization = await prisma.organization.findFirst({
     where: {
       AND: {
         slug: organizationSlug,
         organizationMembers: {
           some: {
-            userId: auth.user.id,
-            role: requiredRole,
+            id: organizationMember.id,
           },
         },
       },
@@ -73,7 +90,12 @@ export async function authorizedOrganization(
     redirect(`/error/no-access?org=${organizationSlug}`);
   }
 
+  if (requiredRole && organizationMember.role !== requiredRole) {
+    redirect(`/dashboard/${organizationSlug}/error/unauthorized`);
+  }
+
   return {
+    organizationMember,
     organization,
     ...auth,
   };

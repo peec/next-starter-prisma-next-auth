@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { Organization } from "@prisma/client";
+import {
+  Organization,
+  OrganizationInvite,
+  OrganizationMember,
+} from "@prisma/client";
 
 export const inviteMemberFormSchema = z.object({
   email: z.string().email().min(1, "Email is required"),
@@ -9,4 +13,12 @@ export const inviteMemberFormSchema = z.object({
 export type InviteHandler = (
   organization: Organization,
   values: z.infer<typeof inviteMemberFormSchema>,
+) => Promise<{ success: true } | { success: false; error: string }>;
+
+export type RevokeHandler = (
+  invitation: OrganizationInvite & { organization: { slug: string } },
+) => Promise<{ success: true } | { success: false; error: string }>;
+
+export type RemoveMemberHandler = (
+  member: OrganizationMember & { organization: { slug: string } },
 ) => Promise<{ success: true } | { success: false; error: string }>;

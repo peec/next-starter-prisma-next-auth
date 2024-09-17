@@ -8,6 +8,7 @@ export default async function Page() {
 
   // @todo use cookie here for preference or a global settings for user in db
   const organization = await prisma.organization.findFirst({
+    select: { slug: true },
     where: {
       organizationMembers: {
         every: {

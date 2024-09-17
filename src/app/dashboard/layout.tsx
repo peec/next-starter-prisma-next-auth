@@ -1,13 +1,8 @@
 import { ReactNode } from "react";
-import SignOut from "@/components/auth/SignOut";
 import { authenticated } from "@/auth";
+import UserProvider from "@/providers/UserProvider";
 
 export default async function Layout({ children }: { children: ReactNode }) {
-  await authenticated();
-  return (
-    <div>
-      <SignOut />
-      {children}
-    </div>
-  );
+  const { user } = await authenticated();
+  return <UserProvider user={user}>{children}</UserProvider>;
 }

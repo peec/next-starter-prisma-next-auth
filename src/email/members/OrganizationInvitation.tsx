@@ -42,7 +42,7 @@ export const OrganizationInvitation = ({
     <Section style={section}>
       <Text style={text}>To accept the invitation click the link below.</Text>
       <Link
-        href={`${emailBaseUrl}/inbound/accept-org-invitation?id=${invitation.id}`}
+        href={`${emailBaseUrl}/invitation?id=${invitation.id}`}
         style={button}
       >
         Accept invitation

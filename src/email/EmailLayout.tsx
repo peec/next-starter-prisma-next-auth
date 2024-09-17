@@ -8,10 +8,9 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 import { ReactNode } from "react";
+import { serverEnv } from "@/env.server.mjs";
 
-export const emailBaseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+export const emailBaseUrl = serverEnv.BASE_URL;
 
 export const EmailLayout = ({ children }: { children: ReactNode }) => (
   <Html>

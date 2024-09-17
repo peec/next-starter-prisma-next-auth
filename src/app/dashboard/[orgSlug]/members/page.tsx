@@ -2,7 +2,11 @@ import { authorizedOrganization } from "@/auth";
 import { OrganizationMemberRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import UserManager from "@/components/organization/members/UserManager";
-import { inviteMember } from "@/app/dashboard/[orgSlug]/members/actions";
+import {
+  inviteMember,
+  removeMember,
+  revokeInvitation,
+} from "@/app/dashboard/[orgSlug]/members/actions";
 
 export default async function Page({
   params: { orgSlug },
@@ -24,6 +28,11 @@ export default async function Page({
           email: true,
         },
       },
+      organization: {
+        select: {
+          slug: true,
+        },
+      },
     },
   });
 
@@ -31,13 +40,23 @@ export default async function Page({
     where: {
       organization,
     },
+    include: {
+      organization: {
+        select: {
+          slug: true,
+        },
+      },
+    },
   });
 
   return (
     <UserManager
       members={members}
+      invites={invites}
       inviteMember={inviteMember}
       organization={organization}
+      revokeInvitation={revokeInvitation}
+      removeMember={removeMember}
     />
   );
 }
