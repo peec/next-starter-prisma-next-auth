@@ -7,12 +7,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { Organization, OrganizationMember } from "@prisma/client";
 import { MenuItem } from "@/components/layout/types";
+import OrganizationSelector from "@/components/layout/OrganizationSelector";
 
 export default function MobileMenu({
   organization,
   organizationMember,
+  organizations,
   menu,
 }: {
+  organizations: Organization[];
   organization: Organization;
   organizationMember: OrganizationMember;
   menu: MenuItem[];
@@ -47,7 +50,12 @@ export default function MobileMenu({
             );
           })}
         </nav>
-        <div className="mt-auto">{organization.name}</div>
+        <div className="mt-auto">
+          <OrganizationSelector
+            organizations={organizations}
+            organization={organization}
+          />
+        </div>
       </SheetContent>
     </Sheet>
   );

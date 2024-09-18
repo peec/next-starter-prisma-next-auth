@@ -1,9 +1,4 @@
-import {
-  Link,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Link, Preview, Section, Text } from "@react-email/components";
 import * as React from "react";
 import {
   button,
@@ -16,16 +11,19 @@ import {
 import { APP_NAME } from "@/settings";
 import { PasswordResetToken } from "@prisma/client";
 
-export const OrganizationInvitation = ({token, name}: {token: PasswordResetToken; name: string}) => (
+export const OrganizationInvitation = ({
+  token,
+  name,
+}: {
+  token: PasswordResetToken;
+  name: string;
+}) => (
   <EmailLayout>
-    <Preview>
-      Forgot password request
-    </Preview>
-    <Text style={title}>
-      Hello {name}!
-    </Text>
+    <Preview>Forgot password request</Preview>
+    <Text style={title}>Hello {name}!</Text>
     <Text style={text}>
-      You or someone else have requested to change passsword on {APP_NAME}</Text>
+      You or someone else have requested to change passsword on {APP_NAME}
+    </Text>
 
     <Section style={section}>
       <Text style={text}>Reset your password below</Text>

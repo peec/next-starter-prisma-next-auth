@@ -47,7 +47,6 @@ const providers: Provider[] = [
   }),
 ];
 
-
 export const providerMap = providers
   .map((provider) => {
     if (typeof provider === "function") {

@@ -9,7 +9,7 @@ import {
 import * as React from "react";
 import { ReactNode } from "react";
 import { serverEnv } from "@/env.server.mjs";
-import {APP_NAME} from "@/settings";
+import { APP_NAME } from "@/settings";
 
 export const emailBaseUrl = serverEnv.BASE_URL;
 
