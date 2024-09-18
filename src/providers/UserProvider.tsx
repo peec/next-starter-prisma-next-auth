@@ -2,7 +2,9 @@
 import React, { ReactNode } from "react";
 import { User } from "@prisma/client";
 
-export const UserContext = React.createContext<{ user: User | null }>({
+export const UserContext = React.createContext<{
+  user: Omit<User, "password"> | null;
+}>({
   user: null,
 });
 
@@ -10,7 +12,7 @@ export default function UserProvider({
   user,
   children,
 }: {
-  user: User;
+  user: Omit<User, "password">;
   children: ReactNode;
 }) {
   return (

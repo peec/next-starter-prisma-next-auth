@@ -1,6 +1,6 @@
 ## Nextjs SaaS starter with next-auth 5 and authentication and auhtorization for SaaS
 
-A basic setup with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
+A basic setup for SaaS with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
 
 - Nextjs 14.x
 - Prisma

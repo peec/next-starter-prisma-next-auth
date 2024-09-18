@@ -13,6 +13,21 @@ import OrganizationInvitation from "@/email/members/OrganizationInvitation";
 
 export const inviteMember: InviteHandler = async (organization, data) => {
   await authorizedOrganization(organization.slug);
+  if (
+    await prisma.organizationMember.findFirst({
+      where: {
+        user: {
+          email: data.email,
+        },
+        orgId: organization.id,
+      },
+    })
+  ) {
+    return {
+      success: false,
+      error: `${data.email} is already a member of the organization.`,
+    };
+  }
   try {
     await prisma.$transaction(async (tx) => {
       const invitation = await tx.organizationInvite.create({

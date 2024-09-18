@@ -126,6 +126,12 @@ CREATE UNIQUE INDEX "Organization_slug_key" ON "Organization"("slug");
 -- CreateIndex
 CREATE UNIQUE INDEX "Organization_customerId_key" ON "Organization"("customerId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "OrganizationMember_orgId_userId_key" ON "OrganizationMember"("orgId", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "OrganizationInvite_orgId_email_key" ON "OrganizationInvite"("orgId", "email");
+
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

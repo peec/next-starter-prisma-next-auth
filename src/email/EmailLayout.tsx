@@ -9,6 +9,7 @@ import {
 import * as React from "react";
 import { ReactNode } from "react";
 import { serverEnv } from "@/env.server.mjs";
+import {APP_NAME} from "@/settings";
 
 export const emailBaseUrl = serverEnv.BASE_URL;
 
@@ -23,8 +24,8 @@ export const EmailLayout = ({ children }: { children: ReactNode }) => (
           height="60"
           alt="Logo"
         />
-
-        <Text style={footer}></Text>
+        {children}
+        <Text style={footer}>{APP_NAME}</Text>
       </Container>
     </Body>
   </Html>

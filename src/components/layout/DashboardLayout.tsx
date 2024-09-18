@@ -33,7 +33,7 @@ export function DashboardLayout({
   organizationMember,
 }: {
   organizationMember: OrganizationMember;
-  user: User;
+  user: Omit<User, "password">;
   children: ReactNode;
   organization: Organization;
 }) {
@@ -117,6 +117,9 @@ export function DashboardLayout({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem asChild>
+                <span>{user.name || user.email}</span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <form

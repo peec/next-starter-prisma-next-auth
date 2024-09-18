@@ -108,6 +108,8 @@ model OrganizationMember {
   role         OrganizationMemberRole @default(OWNER)
   organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
   user         User                   @relation(fields: [userId], references: [id], onUpdate: NoAction)
+
+  @@unique([orgId, userId])
 }
 
 enum OrganizationMemberRole {
@@ -121,4 +123,6 @@ model OrganizationInvite {
   email        String
   role         OrganizationMemberRole @default(MEMBER)
   organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
+
+  @@unique([orgId, email])
 }

@@ -24,11 +24,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
  * - user object (from db)
  * - can() method that can be used for fine-grained permission checking or just if the user has a role and role is super admin.
  */
-export async function authenticated({
-  callbackUrl,
-}: {
-  callbackUrl?: string;
-} = {}) {
+export async function authenticated(
+  {
+    callbackUrl = "/dashboard",
+  }: {
+    callbackUrl?: string;
+  } = { callbackUrl: "/dashboard" },
+) {
   const session = await auth();
 
   const redirectTo = "/api/auth/signin?callbackUrl=" + callbackUrl;
@@ -50,8 +52,10 @@ export async function authenticated({
   if (!user) {
     redirect(redirectTo);
   }
+  // avoid leaking password though app
+  const { password, ...userWithoutPassword } = user;
 
-  return { session, user };
+  return { session, user: userWithoutPassword };
 }
 
 export async function authorizedOrganization(
