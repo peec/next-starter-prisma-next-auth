@@ -59,28 +59,46 @@ export async function authenticated(
 }
 
 export async function authorizedOrganization(
-  organizationSlug: string,
+  organizationSlugOrId: string | { id: string },
   requiredRoles?: OrganizationMemberRole[],
 ) {
   const auth = await authenticated();
 
-  const organizationMember = await prisma.organizationMember.findFirst({
-    where: {
-      userId: auth.user.id,
-      organization: {
-        slug: organizationSlug,
+  const organizationMember = await (async () => {
+    if (typeof organizationSlugOrId === "string") {
+      return prisma.organizationMember.findFirst({
+        where: {
+          userId: auth.user.id,
+          organization: {
+            slug: organizationSlugOrId,
+          },
+        },
+      });
+    }
+    return prisma.organizationMember.findFirst({
+      where: {
+        userId: auth.user.id,
+        organization: {
+          id: organizationSlugOrId.id,
+        },
       },
-    },
-  });
+    });
+  })();
 
   if (!organizationMember) {
-    redirect(`/error/no-access?org=${organizationSlug}`);
+    redirect(`/error/no-access}`);
   }
 
   const organization = await prisma.organization.findFirst({
     where: {
       AND: {
-        slug: organizationSlug,
+        ...(typeof organizationSlugOrId === "string"
+          ? {
+              slug: organizationSlugOrId,
+            }
+          : {
+              id: organizationSlugOrId.id,
+            }),
         organizationMembers: {
           some: {
             id: organizationMember.id,
@@ -91,11 +109,11 @@ export async function authorizedOrganization(
   });
 
   if (!organization) {
-    redirect(`/error/no-access?org=${organizationSlug}`);
+    redirect(`/error/no-access}`);
   }
 
   if (requiredRoles && !requiredRoles.includes(organizationMember.role)) {
-    redirect(`/dashboard/${organizationSlug}/error/unauthorized`);
+    redirect(`/dashboard/${organization.slug}/error/unauthorized`);
   }
 
   return {

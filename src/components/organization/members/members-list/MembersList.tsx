@@ -17,6 +17,7 @@ import {
 import { useUser } from "@/hooks/use-user";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { useOrganization } from "@/hooks/use-organization";
 
 export default function MembersList({
   members,
@@ -30,6 +31,7 @@ export default function MembersList({
   })[];
   invites: (OrganizationInvite & { organization: { slug: string } })[];
 }) {
+  const { organization } = useOrganization();
   const user = useUser();
   const router = useRouter();
   const { toast } = useToast();
@@ -73,7 +75,10 @@ export default function MembersList({
                   onClick={async () => {
                     const invite = invites.find((inv) => inv.id === member.id);
                     if (invite) {
-                      const result = await revokeInvitation(invite);
+                      const result = await revokeInvitation(
+                        organization.id,
+                        invite,
+                      );
                       if (result.success) {
                         toast({
                           variant: "default",
@@ -110,7 +115,10 @@ export default function MembersList({
                       (inv) => inv.id === member.id,
                     );
                     if (memberEntity) {
-                      const result = await removeMember(memberEntity);
+                      const result = await removeMember(
+                        organization.id,
+                        memberEntity,
+                      );
                       if (result.success) {
                         toast({
                           variant: "default",

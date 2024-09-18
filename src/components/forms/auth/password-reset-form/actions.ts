@@ -10,9 +10,9 @@ import {
 
 export async function handleResetPasswordAction(
   token: string,
-  data: PasswordResetFormDataInputs,
+  values: PasswordResetFormDataInputs | unknown,
 ) {
-  const inputRequest = PasswordResetFormSchema.safeParse(data);
+  const inputRequest = PasswordResetFormSchema.safeParse(values);
   if (!inputRequest.success) {
     return {
       success: false,

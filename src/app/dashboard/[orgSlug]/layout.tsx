@@ -1,6 +1,7 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { authorizedOrganization } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import OrganizationProvider from "@/providers/OrganizationProvider";
 
 export default async function RootLayout({
   params: { orgSlug },
@@ -21,13 +22,18 @@ export default async function RootLayout({
     },
   });
   return (
-    <DashboardLayout
-      organizationMember={organizationMember}
-      user={user}
+    <OrganizationProvider
       organization={organization}
-      organizations={organizations}
+      organizationMember={organizationMember}
     >
-      {children}
-    </DashboardLayout>
+      <DashboardLayout
+        organizationMember={organizationMember}
+        user={user}
+        organization={organization}
+        organizations={organizations}
+      >
+        {children}
+      </DashboardLayout>
+    </OrganizationProvider>
   );
 }

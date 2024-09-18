@@ -1,19 +1,25 @@
 "use server";
 
-import {
-  RemoveMemberHandler,
-  RevokeHandler,
-} from "@/components/forms/organization/member/invite-member-form/form";
 import { authorizedOrganization } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { OrganizationInvite, OrganizationMember } from "@prisma/client";
 
-export const revokeInvitation: RevokeHandler = async (invitation) => {
+type RevokeHandler = (
+  organizationId: string,
+  invitation: OrganizationInvite & { organization: { slug: string } },
+) => Promise<{ success: true } | { success: false; error: string }>;
+
+export const revokeInvitation: RevokeHandler = async (
+  organizationId,
+  invitation,
+) => {
   try {
-    await authorizedOrganization(invitation.organization.slug, ["OWNER"]);
+    await authorizedOrganization({ id: organizationId }, ["OWNER"]);
 
     await prisma.organizationInvite.delete({
       where: {
         id: invitation.id,
+        orgId: organizationId,
       },
     });
 
@@ -29,9 +35,17 @@ export const revokeInvitation: RevokeHandler = async (invitation) => {
   }
 };
 
-export const removeMember: RemoveMemberHandler = async (member) => {
+type RemoveMemberHandler = (
+  organizationId: string,
+  member: OrganizationMember & { organization: { slug: string } },
+) => Promise<{ success: true } | { success: false; error: string }>;
+
+export const removeMember: RemoveMemberHandler = async (
+  organizationid,
+  member,
+) => {
   try {
-    const { user } = await authorizedOrganization(member.organization.slug, [
+    const { user } = await authorizedOrganization({ id: organizationid }, [
       "OWNER",
     ]);
 
@@ -45,6 +59,7 @@ export const removeMember: RemoveMemberHandler = async (member) => {
     await prisma.organizationMember.delete({
       where: {
         id: member.id,
+        orgId: organizationid,
       },
     });
 

@@ -11,9 +11,9 @@ import {
 import { isPasswordResetTokenExpired } from "@/lib/db";
 
 export async function handleForgotPasswordAction(
-  data: ForgotPasswordFormDataInputs,
+  values: ForgotPasswordFormDataInputs | unknown,
 ) {
-  const inputRequest = ForgotPasswordFormDataSchema.safeParse(data);
+  const inputRequest = ForgotPasswordFormDataSchema.safeParse(values);
   if (!inputRequest.success) {
     return {
       success: false,
@@ -53,7 +53,7 @@ export async function handleForgotPasswordAction(
     if (!isPasswordResetTokenExpired(existingToken)) {
       try {
         await sendEmail({
-          to: data.email,
+          to: input.email,
           subject: `Password reset request on ${APP_NAME}`,
           body: ResetPassword({
             token: existingToken,
@@ -88,7 +88,7 @@ export async function handleForgotPasswordAction(
         },
       });
       await sendEmail({
-        to: data.email,
+        to: input.email,
         subject: `Password reset request on ${APP_NAME}`,
         body: ResetPassword({ token, name: user.name || user.email }),
       });

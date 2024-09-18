@@ -10,15 +10,17 @@ import {
   RegisterFormDataSchema,
 } from "@/components/forms/auth/register-form/schema";
 
-export async function handleRegisterAction(data: RegisterFormDataInputs) {
-  const inputRequest = RegisterFormDataSchema.safeParse(data);
+export async function handleRegisterAction(
+  values: RegisterFormDataInputs | unknown,
+) {
+  const inputRequest = RegisterFormDataSchema.safeParse(values);
   if (!inputRequest.success) {
     return {
       success: false,
       error: "Validation error",
     };
   }
-  const input = inputRequest.data;
+  const data = inputRequest.data;
 
   if (await prisma.user.findFirst({ where: { email: data.email } })) {
     return {
@@ -29,13 +31,13 @@ export async function handleRegisterAction(data: RegisterFormDataInputs) {
   }
 
   try {
-    const password = await hash(input.password, 12);
+    const password = await hash(data.password, 12);
 
     await prisma.user.create({
       data: {
-        email: input.email,
+        email: data.email,
         password,
-        name: input.name,
+        name: data.name,
       },
     });
   } catch (error) {
@@ -50,7 +52,7 @@ export async function handleRegisterAction(data: RegisterFormDataInputs) {
     await sendEmail({
       to: data.email,
       subject: `Welcome to ${APP_NAME}`,
-      body: WelcomeRegistation({ name: input.name }),
+      body: WelcomeRegistation({ name: data.name }),
     });
   } catch (error) {
     console.error(error);
