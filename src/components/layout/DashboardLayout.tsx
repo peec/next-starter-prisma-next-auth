@@ -50,7 +50,7 @@ export function DashboardLayout({
       name: "Members",
       iconDesktop: <Users className="h-4 w-4" />,
       iconMobile: <Users className="h-5 w-5" />,
-      role: "OWNER",
+      roles: ["OWNER"],
     },
   ];
 
@@ -70,7 +70,10 @@ export function DashboardLayout({
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               {menu.map((item) => {
-                if (item.role && organizationMember.role !== item.role) {
+                if (
+                  item.roles &&
+                  !item.roles.includes(organizationMember.role)
+                ) {
                   return null;
                 }
                 return (

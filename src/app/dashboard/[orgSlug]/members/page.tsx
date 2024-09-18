@@ -13,10 +13,9 @@ export default async function Page({
 }: {
   params: { orgSlug: string };
 }) {
-  const { organization } = await authorizedOrganization(
-    orgSlug,
+  const { organization } = await authorizedOrganization(orgSlug, [
     OrganizationMemberRole.OWNER,
-  );
+  ]);
 
   const members = await prisma.organizationMember.findMany({
     where: {

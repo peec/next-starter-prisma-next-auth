@@ -30,7 +30,7 @@ export default function MobileMenu({
       <SheetContent side="left" className="flex flex-col">
         <nav className="grid gap-2 text-lg font-medium">
           {menu.map((item) => {
-            if (item.role && organizationMember.role !== item.role) {
+            if (item.roles && !item.roles.includes(organizationMember.role)) {
               return null;
             }
 

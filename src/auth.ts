@@ -60,7 +60,7 @@ export async function authenticated(
 
 export async function authorizedOrganization(
   organizationSlug: string,
-  requiredRole?: OrganizationMemberRole,
+  requiredRoles?: OrganizationMemberRole[],
 ) {
   const auth = await authenticated();
 
@@ -94,7 +94,7 @@ export async function authorizedOrganization(
     redirect(`/error/no-access?org=${organizationSlug}`);
   }
 
-  if (requiredRole && organizationMember.role !== requiredRole) {
+  if (requiredRoles && !requiredRoles.includes(organizationMember.role)) {
     redirect(`/dashboard/${organizationSlug}/error/unauthorized`);
   }
 

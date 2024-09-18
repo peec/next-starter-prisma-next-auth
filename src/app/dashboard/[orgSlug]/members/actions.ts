@@ -12,23 +12,23 @@ import { APP_NAME } from "@/settings";
 import OrganizationInvitation from "@/email/members/OrganizationInvitation";
 
 export const inviteMember: InviteHandler = async (organization, data) => {
-  await authorizedOrganization(organization.slug);
-  if (
-    await prisma.organizationMember.findFirst({
-      where: {
-        user: {
-          email: data.email,
-        },
-        orgId: organization.id,
-      },
-    })
-  ) {
-    return {
-      success: false,
-      error: `${data.email} is already a member of the organization.`,
-    };
-  }
   try {
+    await authorizedOrganization(organization.slug, ["OWNER"]);
+    if (
+      await prisma.organizationMember.findFirst({
+        where: {
+          user: {
+            email: data.email,
+          },
+          orgId: organization.id,
+        },
+      })
+    ) {
+      return {
+        success: false,
+        error: `${data.email} is already a member of the organization.`,
+      };
+    }
     await prisma.$transaction(async (tx) => {
       const invitation = await tx.organizationInvite.create({
         data: {
@@ -43,7 +43,6 @@ export const inviteMember: InviteHandler = async (organization, data) => {
         body: OrganizationInvitation({ organization, invitation }),
       });
     });
-    console.log("success invite member");
     return {
       success: true,
     };
@@ -58,7 +57,7 @@ export const inviteMember: InviteHandler = async (organization, data) => {
 
 export const revokeInvitation: RevokeHandler = async (invitation) => {
   try {
-    await authorizedOrganization(invitation.organization.slug, "OWNER");
+    await authorizedOrganization(invitation.organization.slug, ["OWNER"]);
 
     await prisma.organizationInvite.delete({
       where: {
@@ -80,10 +79,9 @@ export const revokeInvitation: RevokeHandler = async (invitation) => {
 
 export const removeMember: RemoveMemberHandler = async (member) => {
   try {
-    const { user } = await authorizedOrganization(
-      member.organization.slug,
+    const { user } = await authorizedOrganization(member.organization.slug, [
       "OWNER",
-    );
+    ]);
 
     if (user.id === member.userId) {
       return {

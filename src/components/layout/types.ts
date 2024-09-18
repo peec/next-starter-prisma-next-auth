@@ -6,5 +6,5 @@ export type MenuItem = {
   name: string;
   iconDesktop: ReactNode;
   iconMobile: ReactNode;
-  role?: OrganizationMemberRole;
+  roles?: OrganizationMemberRole[];
 };
