@@ -33,7 +33,7 @@ export async function authenticated(
 ) {
   const session = await auth();
 
-  const redirectTo = "/api/auth/signin?callbackUrl=" + callbackUrl;
+  const redirectTo = "/login?callbackUrl=" + callbackUrl;
   if (!session?.user) {
     redirect(redirectTo);
   }

@@ -1,12 +1,15 @@
 import { authorizedOrganization } from "@/auth";
 import { OrganizationMemberRole } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import UserManager from "@/components/organization/members/UserManager";
+import InviteMemberForm from "@/components/forms/organization/member/invite-member-form/InviteMemberForm";
 import {
-  inviteMember,
-  removeMember,
-  revokeInvitation,
-} from "@/app/dashboard/[orgSlug]/members/actions";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import MembersList from "@/components/organization/members/members-list/MembersList";
 
 export default async function Page({
   params: { orgSlug },
@@ -49,13 +52,24 @@ export default async function Page({
   });
 
   return (
-    <UserManager
-      members={members}
-      invites={invites}
-      inviteMember={inviteMember}
-      organization={organization}
-      revokeInvitation={revokeInvitation}
-      removeMember={removeMember}
-    />
+    <div>
+      <div className="flex items-center">
+        <div className="ml-auto flex items-center gap-2">
+          <InviteMemberForm organization={organization} />
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>User Management</CardTitle>
+          <CardDescription>
+            Manage existing users and invite new ones to your organization.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <MembersList members={members} invites={invites} />
+        </CardContent>
+      </Card>
+    </div>
   );
 }

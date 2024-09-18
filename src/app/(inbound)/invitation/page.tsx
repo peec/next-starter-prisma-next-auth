@@ -7,7 +7,6 @@ export default async function Invitation({
 }: {
   searchParams?: { [key: string]: string | undefined };
 }) {
-  console.log("test...");
   const id = searchParams?.id;
   if (!id) {
     return <p className="text-center">Invalid invitation</p>;

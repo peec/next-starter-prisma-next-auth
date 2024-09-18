@@ -1,23 +1,20 @@
 ## Nextjs SaaS starter with next-auth 5 and authentication and auhtorization for SaaS
 
-A basic setup for SaaS with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
+A complete setup for SaaS with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
 
 - Nextjs 14.x
 - Prisma
 - Next-auth 
-  - configured with Credentials, 
-  - JWT 
-  - custom method for redirection to login based on authorization.
-  - Due to the nextjs still only having edge runtime in the middleware (WTF?!).. This repo does not run any prisma in the middleware (edge), which mean auhtorization is done on each page or in layout with  `await authorize()`
 - Shadcn forms (react-hook-form)
 
-Basic setup:
+Features:
 
-- Next-auth with Crendetials provider
-- Prisma and prisma adapter configured
-- Authorization system with Roles and permissions
-- See app/ dir for example and prisma setup
-- Compatible with edge middleware runtime, as we are using JWT as strategy and use `await authorize()` in the app page.tsx files / layouts.
+- [x] Login with credentials
+- [x] Password reset
+- [x] Registration
+- [x] Email support
+- [x] Create organizations
+- [x] Invite members to organization.
 
 ## Getting Started
 
@@ -37,23 +34,4 @@ Basic setup:
     npx prisma db seed
     npm run dev
     ```
-
-
-### Default login details
-
-the `prisma/seed.ts` file will create some test accounts, and create some user roles and example permissions, modify this file to suit your needs
-
-Admin account
-
-```
-email: admin@admin.com
-password: admin
-```
-
-Contributor account (example of role based autorization with permission system)
-
-```
-email: contributor@contributor.com
-password: contributor
-```
 

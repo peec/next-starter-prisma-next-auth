@@ -24,6 +24,16 @@ model User {
 
   organizations       Organization[]
   organizationMembers OrganizationMember[]
+  passwordResetToken  PasswordResetToken?
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -99,6 +109,8 @@ model Organization {
   subscription        OrganizationSubscription? @relation(fields: [subscriptionId], references: [id], onUpdate: NoAction)
   organizationMembers OrganizationMember[]
   invites             OrganizationInvite[]
+
+  @@index([slug])
 }
 
 model OrganizationMember {

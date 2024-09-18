@@ -25,17 +25,20 @@ import { signOut } from "@/auth";
 import { Organization, OrganizationMember, User } from "@prisma/client";
 import { MenuItem } from "@/components/layout/types";
 import MobileMenu from "@/components/layout/MobileMenu";
+import OrganizationSelector from "@/components/layout/OrganizationSelector";
 
 export function DashboardLayout({
   children,
   organization,
   user,
   organizationMember,
+  organizations,
 }: {
   organizationMember: OrganizationMember;
   user: Omit<User, "password">;
   children: ReactNode;
   organization: Organization;
+  organizations: Organization[];
 }) {
   const orgUrl = `/dashboard/${organization.slug}`;
   const menu: MenuItem[] = [
@@ -89,7 +92,12 @@ export function DashboardLayout({
               })}
             </nav>
           </div>
-          <div className="mt-auto p-4">{organization.name}</div>
+          <div className="mt-auto p-4">
+            <OrganizationSelector
+              organizations={organizations}
+              organization={organization}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col">

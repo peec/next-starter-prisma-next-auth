@@ -33,17 +33,16 @@ import { useState } from "react";
 import {
   InviteHandler,
   inviteMemberFormSchema,
-} from "@/components/organization/members/form";
+} from "@/components/forms/organization/member/invite-member-form/form";
 import { Organization } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { PlusCircle } from "lucide-react";
+import { inviteMember } from "@/components/forms/organization/member/invite-member-form/actions";
 
 export default function InviteMemberForm({
-  inviteMember,
   organization,
 }: {
-  inviteMember: InviteHandler;
   organization: Organization;
 }) {
   const { toast } = useToast();
