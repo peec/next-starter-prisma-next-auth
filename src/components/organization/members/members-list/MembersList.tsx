@@ -18,6 +18,7 @@ import { useUser } from "@/hooks/use-user";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useOrganization } from "@/hooks/use-organization";
+import { useConfirm } from "@/hooks/alert";
 
 export default function MembersList({
   members,
@@ -28,6 +29,7 @@ export default function MembersList({
   })[];
   invites: OrganizationInvite[];
 }) {
+  const confirm = useConfirm();
   const { organization } = useOrganization();
   const { user } = useUser();
   const router = useRouter();
@@ -70,6 +72,16 @@ export default function MembersList({
                   size="sm"
                   type="button"
                   onClick={async () => {
+                    const confirmed = await confirm({
+                      title: "Confirm removal",
+                      body: `Are you sure you want to remove ${member.email} from the organization?`,
+                      cancelButton: "Cancel",
+                      actionButton: "Confirm",
+                      actionButtonVariant: "destructive",
+                    });
+                    if (!confirmed) {
+                      return;
+                    }
                     const result = await revokeInvitation(organization.id, {
                       id: member.id,
                     });

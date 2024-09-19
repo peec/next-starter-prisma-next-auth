@@ -26,7 +26,6 @@ import { Organization } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { inviteMember } from "@/components/forms/organization/member/invite-member-form/actions";
-import { DialogClose } from "@/components/ui/dialog";
 
 export default function InviteMemberForm({
   organization,
@@ -46,6 +45,11 @@ export default function InviteMemberForm({
     const result = await inviteMember(organization.id, values);
     if (result.success) {
       router.refresh();
+      form.reset();
+      toast({
+        title: "Member invited",
+        description: "Member invited to the team, an email has been sent.",
+      });
     } else {
       toast({
         variant: "destructive",
@@ -98,9 +102,7 @@ export default function InviteMemberForm({
               </FormItem>
             )}
           />
-          <DialogClose asChild>
-            <Button type="submit">Invite User</Button>
-          </DialogClose>
+          <Button type="submit">Invite User</Button>
         </div>
       </form>
     </Form>
