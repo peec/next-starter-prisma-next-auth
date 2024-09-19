@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import PageTitle from "@/components/layout/PageTitle";
 
 export default async function Page({
   params: { orgSlug },
@@ -51,6 +52,10 @@ export default async function Page({
 
   return (
     <div>
+      <PageTitle
+        title="Manage members"
+        description="Manage existing users and invite new ones to your organization."
+      />
       <div className="flex items-center">
         <div className="ml-auto flex items-center gap-2">
           <div className="flex justify-between items-center mb-4">
@@ -77,18 +82,7 @@ export default async function Page({
           </div>
         </div>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>User Management</CardTitle>
-          <CardDescription>
-            Manage existing users and invite new ones to your organization.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <MembersList members={members} invites={invites} />
-        </CardContent>
-      </Card>
+      <MembersList members={members} invites={invites} />
     </div>
   );
 }

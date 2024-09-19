@@ -1,23 +1,17 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { authenticated } from "@/auth";
 import SetPasswordForm from "@/components/forms/account/set-password-form/SetPasswordForm";
+import PageTitle from "@/components/layout/PageTitle";
 
 export default async function AccountSettings() {
-  const { user, hasPassword } = await authenticated();
+  const { hasPassword } = await authenticated();
 
   return (
     <div className="w-full max-w-lg">
       <div>
-        <CardTitle className="text-3xl font-bold">Change password</CardTitle>
-        <CardDescription>
-          Change or set a password for your account.
-        </CardDescription>
+        <PageTitle
+          title="Change password"
+          description="Change or set a password for your account."
+        />
 
         <SetPasswordForm hasPassword={hasPassword} />
       </div>

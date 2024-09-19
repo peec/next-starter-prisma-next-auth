@@ -9,26 +9,30 @@ import {
   title,
 } from "@/email/EmailLayout";
 import { APP_NAME } from "@/settings";
-import { Organization, OrganizationInvite } from "@prisma/client";
 
-export const OrganizationInvitation = ({ name }: { name: string }) => (
+export const WelcomeRegistration = ({
+  name,
+  verificationToken,
+}: {
+  name: string;
+  verificationToken: string;
+}) => (
   <EmailLayout>
-    <Preview>
-      Welcome to
-      {APP_NAME}
-    </Preview>
+    <Preview>Verify your account on {APP_NAME}</Preview>
     <Text style={title}>Hello {name}!</Text>
     <Text style={text}>
-      You have successfully created an account on {APP_NAME}
+      You have successfully created an account on {APP_NAME}, you will need to
+      verify your account before you can log in.
     </Text>
 
     <Section style={section}>
-      <Text style={text}>Login to the dashboard below</Text>
-      <Link href={`${emailBaseUrl}/dashboard`} style={button}>
-        Dashboard
+      <Text style={text}>Verify your account below:</Text>
+      <Link
+        href={`${emailBaseUrl}/user-verification?token=${verificationToken}`}
+        style={button}
+      >
+        Verify account
       </Link>
     </Section>
   </EmailLayout>
 );
-
-export default OrganizationInvitation;

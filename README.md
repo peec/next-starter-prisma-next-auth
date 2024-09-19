@@ -18,14 +18,15 @@ Customize to your needs.
 
 - [x] Login with credentials
 - [x] Password reset
-- [x] Registration
-- [x] Email support
+- [x] Registration with required verify account by email
+- [x] Sending Email support
 - [x] Create organizations
 - [x] Invite members to organization.
 - [x] Organization settings for changing org-name.
-- [x] User profile management with change password feature / set password
+- [x] User profile management with change password feature / set password, show providers.
+- [ ] File uploads ( avatar in user-profile and more.. ) Azure Blob storage?
 - [ ] Delete organization
-- [ ] Stripe for automated billing
+- [ ] Stripe for automated billing(?)
 
 ## Getting Started
 
@@ -50,7 +51,7 @@ Customize to your needs.
 - ALL models belonging to an organizaiton should have the `orgId` column.
 - Always add where { ...., orgId: orgId }
 - server actions that is to be used against any organizations should use the `securedOrganizationAction` wrapper ( see `src/lib/action-utils.ts`).
-
+- server actions that requires just authentication should use `securedAction`
 
 
 ## Prisma studio for development
@@ -60,3 +61,10 @@ You can open the prisma studio like so:
 ```
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?schema=public" npx prisma  studio
 ```
+
+## Development notes
+
+
+- Emails goes to console.log instead of actually sending it. ( can be overidden in .env.development )
+- To build locally, use `npm run build-dev`, it does not run prisma migrations, as npm run build will.
+

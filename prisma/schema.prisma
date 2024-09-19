@@ -25,6 +25,16 @@ model User {
   organizations       Organization[]
   organizationMembers OrganizationMember[]
   passwordResetToken  PasswordResetToken?
+  verificationTokens  UserVerificationToken?
+}
+
+model UserVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PasswordResetToken {

@@ -22,6 +22,8 @@ import {
   LoginFormDataInputs,
   LoginFormDataSchema,
 } from "@/components/forms/auth/login-form/schema";
+import { useConfirm, usePrompt } from "@/hooks/alert";
+import { resendVerificationToken } from "@/components/forms/auth/user-verification-form/actions";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -31,6 +33,7 @@ export default function LoginForm() {
     defaultValues: { email: "", password: "" },
   });
   const providers = Object.values(providerMap);
+  const confirm = useConfirm();
 
   const processForm: SubmitHandler<LoginFormDataInputs> = async (data) => {
     startTransaction(async () => {
@@ -41,15 +44,33 @@ export default function LoginForm() {
           redirect: false,
         });
         if (result?.error) {
-          form.setError("password", {
-            type: "server",
-            message: "Invalid credentails",
-          });
+          if (result.code === "not_verified") {
+            form.setError("email", {
+              type: "server",
+              message:
+                "Account not validated yet, go to your email and validate your account.",
+            });
+            const resend = await confirm({
+              title: "Account not verified yet",
+              body: "Your account is not verified yet, check your e-mail. If you have not received an email, check spam or try resending the verification email.",
+              cancelButton: "Close",
+              actionButton: "Resend verification e-mail",
+            });
+            if (resend) {
+              await resendVerificationToken(data.email);
+            }
+          } else {
+            form.setError("password", {
+              type: "server",
+              message: "Invalid credentails",
+            });
+          }
         } else {
-          router.refresh();
-          router.replace("/dashboard");
+          // do full reload
+          window.location.href = "/dashboard";
         }
       } catch (error) {
+        console.log(error);
         form.setError("password", {
           type: "server",
           message: "Invalid credentails",

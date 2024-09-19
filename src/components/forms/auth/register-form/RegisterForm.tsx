@@ -38,8 +38,9 @@ export default function RegisterForm() {
       if (res.success) {
         router.push(`/login`);
         toast({
-          title: "Account created",
-          description: "Login using your new account.",
+          title: "Verification e-mail sent",
+          description:
+            "In order to login, go to your email and verify your account.",
         });
       } else {
         if (res.errorCode === "account_exist") {

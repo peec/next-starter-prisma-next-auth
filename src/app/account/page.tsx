@@ -1,4 +1,3 @@
-import { CardDescription, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpdateProfileForm from "@/components/forms/account/user-profile-form/UpdateProfileForm";
@@ -6,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { authenticated } from "@/auth";
 import { Pencil, UserCheck } from "lucide-react";
 import { providerMap } from "@/auth.config";
+import PageTitle from "@/components/layout/PageTitle";
 
 export default async function AccountSettings() {
   const { user } = await authenticated();
@@ -17,9 +17,11 @@ export default async function AccountSettings() {
   });
 
   return (
-    <div className="w-full">
-      <CardTitle className="text-3xl font-bold">Account settings</CardTitle>
-      <CardDescription>Make changes to your profile here.</CardDescription>
+    <div>
+      <PageTitle
+        title="Account settings"
+        description="Make changes to your profile here."
+      />
       <div className="grid md:grid-cols-2 gap-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">

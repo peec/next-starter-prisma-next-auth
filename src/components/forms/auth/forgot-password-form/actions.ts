@@ -9,6 +9,7 @@ import {
   ForgotPasswordFormDataSchema,
 } from "@/components/forms/auth/forgot-password-form/schema";
 import { isPasswordResetTokenExpired } from "@/lib/db";
+import { generateResetToken } from "@/lib/crypto";
 
 export async function handleForgotPasswordAction(
   values: ForgotPasswordFormDataInputs | unknown,
@@ -36,11 +37,6 @@ export async function handleForgotPasswordAction(
       error:
         "Account does not have password, please login with the provider you used for this email.",
     };
-  }
-
-  async function generateResetToken(length = 32) {
-    const { randomBytes } = await import("node:crypto");
-    return randomBytes(length).toString("hex");
   }
 
   const existingToken = await prisma.passwordResetToken.findFirst({

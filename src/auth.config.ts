@@ -1,10 +1,13 @@
-import type { NextAuthConfig } from "next-auth";
+import { AuthError, CredentialsSignin, NextAuthConfig } from "next-auth";
 import Credentials from "@auth/core/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { compare } from "bcryptjs";
 import Google from "@auth/core/providers/google";
 import { Provider } from "@auth/core/providers";
 
+class NotVerified extends CredentialsSignin {
+  code = "not_verified";
+}
 const providers: Provider[] = [
   Google,
   Credentials({
@@ -36,6 +39,11 @@ const providers: Provider[] = [
         !(await compare(String(credentials.password), user.password))
       ) {
         return null;
+      }
+
+      if (!user.emailVerified) {
+        console.log("email not verified...");
+        throw new NotVerified("Not verified");
       }
 
       return {
