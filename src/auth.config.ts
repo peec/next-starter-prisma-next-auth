@@ -61,7 +61,7 @@ export const providerMap = providers
 export default {
   pages: {
     signIn: "/login",
-    newUser: "/register",
+    newUser: "/dashboard",
   },
   providers: providers,
 } satisfies NextAuthConfig;

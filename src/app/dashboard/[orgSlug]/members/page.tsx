@@ -1,6 +1,5 @@
 import { authorizedOrganization } from "@/auth";
 import { OrganizationMemberRole } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
 import InviteMemberForm from "@/components/forms/organization/member/invite-member-form/InviteMemberForm";
 import {
   Card,
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
 export default async function Page({
   params: { orgSlug },
@@ -40,24 +40,12 @@ export default async function Page({
           email: true,
         },
       },
-      organization: {
-        select: {
-          slug: true,
-        },
-      },
     },
   });
 
   const invites = await prisma.organizationInvite.findMany({
     where: {
       organization,
-    },
-    include: {
-      organization: {
-        select: {
-          slug: true,
-        },
-      },
     },
   });
 

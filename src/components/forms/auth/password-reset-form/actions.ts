@@ -16,7 +16,7 @@ export async function handleResetPasswordAction(
   if (!inputRequest.success) {
     return {
       success: false,
-      error: "Validation error",
+      error: inputRequest.error.message,
     };
   }
   const input = inputRequest.data;

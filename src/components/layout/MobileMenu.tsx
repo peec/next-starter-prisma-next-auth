@@ -4,21 +4,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Organization, OrganizationMember } from "@prisma/client";
 import { MenuItem } from "@/components/layout/types";
 import OrganizationSelector from "@/components/layout/OrganizationSelector";
 
 export default function MobileMenu({
-  organization,
-  organizationMember,
-  organizations,
   menu,
+  sidebarBottom,
 }: {
-  organizations: Organization[];
-  organization: Organization;
-  organizationMember: OrganizationMember;
-  menu: MenuItem[];
+  menu: Omit<MenuItem, "roles">[];
+  sidebarBottom?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -33,10 +29,6 @@ export default function MobileMenu({
       <SheetContent side="left" className="flex flex-col">
         <nav className="grid gap-2 text-lg font-medium">
           {menu.map((item) => {
-            if (item.roles && !item.roles.includes(organizationMember.role)) {
-              return null;
-            }
-
             return (
               <Link
                 onClick={() => setOpen(false)}
@@ -50,12 +42,7 @@ export default function MobileMenu({
             );
           })}
         </nav>
-        <div className="mt-auto">
-          <OrganizationSelector
-            organizations={organizations}
-            organization={organization}
-          />
-        </div>
+        <div className="mt-auto">{sidebarBottom}</div>
       </SheetContent>
     </Sheet>
   );

@@ -46,6 +46,7 @@ export default function LoginForm() {
             message: "Invalid credentails",
           });
         } else {
+          router.refresh();
           router.replace("/dashboard");
         }
       } catch (error) {

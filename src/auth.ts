@@ -26,15 +26,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
  */
 export async function authenticated(
   {
+    action = false,
     callbackUrl = "/dashboard",
   }: {
+    action?: boolean;
     callbackUrl?: string;
-  } = { callbackUrl: "/dashboard" },
+  } = { callbackUrl: "/dashboard", action: false },
 ) {
   const session = await auth();
 
   const redirectTo = "/login?callbackUrl=" + callbackUrl;
   if (!session?.user) {
+    if (action) {
+      throw new Error("unauthorized");
+    }
     redirect(redirectTo);
   }
 
@@ -43,6 +48,9 @@ export async function authenticated(
       `session.user as no email, wrong scope from provider? must have access to email`,
       session.user,
     );
+    if (action) {
+      throw new Error("unauthorized");
+    }
     redirect(redirectTo);
   }
 
@@ -55,12 +63,15 @@ export async function authenticated(
   // avoid leaking password though app
   const { password, ...userWithoutPassword } = user;
 
-  return { session, user: userWithoutPassword };
+  const hasPassword = !!password;
+
+  return { session, user: userWithoutPassword, hasPassword };
 }
 
 export async function authorizedOrganization(
   organizationSlugOrId: string | { id: string },
   requiredRoles?: OrganizationMemberRole[],
+  options: { action: boolean } = { action: false },
 ) {
   const auth = await authenticated();
 
@@ -86,6 +97,9 @@ export async function authorizedOrganization(
   })();
 
   if (!organizationMember) {
+    if (options.action) {
+      throw new Error("unauthorized");
+    }
     redirect(`/error/no-access}`);
   }
 
@@ -109,10 +123,16 @@ export async function authorizedOrganization(
   });
 
   if (!organization) {
+    if (options.action) {
+      throw new Error("unauthorized");
+    }
     redirect(`/error/no-access}`);
   }
 
   if (requiredRoles && !requiredRoles.includes(organizationMember.role)) {
+    if (options.action) {
+      throw new Error("unauthorized");
+    }
     redirect(`/dashboard/${organization.slug}/error/unauthorized`);
   }
 

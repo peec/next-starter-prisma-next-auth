@@ -17,7 +17,7 @@ export async function handleRegisterAction(
   if (!inputRequest.success) {
     return {
       success: false,
-      error: "Validation error",
+      error: inputRequest.error.message,
     };
   }
   const data = inputRequest.data;

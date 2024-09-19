@@ -22,7 +22,8 @@ Customize to your needs.
 - [x] Email support
 - [x] Create organizations
 - [x] Invite members to organization.
-- [ ] Organization settings for changing org-name.
+- [x] Organization settings for changing org-name.
+- [x] User profile management with change password feature / set password
 - [ ] Delete organization
 - [ ] Stripe for automated billing
 
@@ -44,3 +45,18 @@ Customize to your needs.
     npm run dev
     ```
 
+## Organization Models and security concerns
+
+- ALL models belonging to an organizaiton should have the `orgId` column.
+- Always add where { ...., orgId: orgId }
+- server actions that is to be used against any organizations should use the `securedOrganizationAction` wrapper ( see `src/lib/action-utils.ts`).
+
+
+
+## Prisma studio for development
+
+You can open the prisma studio like so:
+
+```
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?schema=public" npx prisma  studio
+```

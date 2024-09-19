@@ -1,28 +1,19 @@
 "use server";
 
-import { authenticated } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Organization, OrganizationMemberRole } from "@prisma/client";
 import slugify from "slugify";
 import { addOrganizaitonSchema } from "@/components/forms/add-organization-form/form";
-import z from "zod";
+import { securedAction } from "@/lib/action-utils";
 
-export async function addOrganization(
-  data: z.infer<typeof addOrganizaitonSchema>,
-): Promise<
-  | { success: true; organization: Organization }
-  | { success: false; error: string }
-> {
+export const addOrganization = securedAction<
+  typeof addOrganizaitonSchema,
+  {
+    organization: Organization;
+    success: true;
+  }
+>(addOrganizaitonSchema, async function (data, { user }) {
   try {
-    const { user } = await authenticated();
-    const inputRequest = addOrganizaitonSchema.safeParse(data);
-    if (!inputRequest.success) {
-      return {
-        success: false,
-        error: "Validation error",
-      };
-    }
-
     const slugged = slugify(data.name.substring(0, 50), {
       lower: true,
     });
@@ -52,4 +43,4 @@ export async function addOrganization(
       error: "Could not create organization",
     };
   }
-}
+});

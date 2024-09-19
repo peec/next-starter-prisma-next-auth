@@ -6,5 +6,8 @@ export function useUser() {
   if (!context.user) {
     throw new Error(`UserProvider must be at the parent level`);
   }
-  return context.user;
+  return {
+    user: context.user,
+    hasPassword: context.hasPassword,
+  };
 }

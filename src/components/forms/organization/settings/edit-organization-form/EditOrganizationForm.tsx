@@ -37,6 +37,9 @@ export default function EditOrganizationForm({
     const result = await editOrganizationSettings(organization.id, values);
     if (result.success) {
       router.refresh();
+      toast({
+        description: "Updated organization settings",
+      });
     } else {
       toast({
         variant: "destructive",

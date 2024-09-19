@@ -24,15 +24,12 @@ export default function MembersList({
   invites,
 }: {
   members: (OrganizationMember & {
-    organization: {
-      slug: string;
-    };
     user: { email: string };
   })[];
-  invites: (OrganizationInvite & { organization: { slug: string } })[];
+  invites: OrganizationInvite[];
 }) {
   const { organization } = useOrganization();
-  const user = useUser();
+  const { user } = useUser();
   const router = useRouter();
   const { toast } = useToast();
   const merged = [
@@ -73,29 +70,25 @@ export default function MembersList({
                   size="sm"
                   type="button"
                   onClick={async () => {
-                    const invite = invites.find((inv) => inv.id === member.id);
-                    if (invite) {
-                      const result = await revokeInvitation(
-                        organization.id,
-                        invite,
-                      );
-                      if (result.success) {
-                        toast({
-                          variant: "default",
-                          description: (
-                            <p>
-                              Invitation for <strong>{invite.email}</strong>{" "}
-                              revoked.
-                            </p>
-                          ),
-                        });
-                        router.refresh();
-                      } else {
-                        toast({
-                          variant: "destructive",
-                          description: result.error,
-                        });
-                      }
+                    const result = await revokeInvitation(organization.id, {
+                      id: member.id,
+                    });
+                    if (result.success) {
+                      toast({
+                        variant: "default",
+                        description: (
+                          <p>
+                            Invitation for <strong>{member.email}</strong>{" "}
+                            revoked.
+                          </p>
+                        ),
+                      });
+                      router.refresh();
+                    } else {
+                      toast({
+                        variant: "destructive",
+                        description: result.error,
+                      });
                     }
                   }}
                   variant="destructive"
@@ -111,31 +104,25 @@ export default function MembersList({
                     members.find((inv) => inv.id === member.id)?.userId
                   }
                   onClick={async () => {
-                    const memberEntity = members.find(
-                      (inv) => inv.id === member.id,
-                    );
-                    if (memberEntity) {
-                      const result = await removeMember(
-                        organization.id,
-                        memberEntity,
-                      );
-                      if (result.success) {
-                        toast({
-                          variant: "default",
-                          description: (
-                            <p>
-                              Removed member <strong>{member.email}</strong>{" "}
-                              from the organization.
-                            </p>
-                          ),
-                        });
-                        router.refresh();
-                      } else {
-                        toast({
-                          variant: "destructive",
-                          description: result.error,
-                        });
-                      }
+                    const result = await removeMember(organization.id, {
+                      id: member.id,
+                    });
+                    if (result.success) {
+                      toast({
+                        variant: "default",
+                        description: (
+                          <p>
+                            Removed member <strong>{member.email}</strong> from
+                            the organization.
+                          </p>
+                        ),
+                      });
+                      router.refresh();
+                    } else {
+                      toast({
+                        variant: "destructive",
+                        description: result.error,
+                      });
                     }
                   }}
                   variant="destructive"

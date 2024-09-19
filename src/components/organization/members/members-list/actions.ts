@@ -1,76 +1,76 @@
 "use server";
 
-import { authorizedOrganization } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { OrganizationInvite, OrganizationMember } from "@prisma/client";
+import { securedOrganizationAction } from "@/lib/action-utils";
+import z from "zod";
 
-type RevokeHandler = (
-  organizationId: string,
-  invitation: OrganizationInvite & { organization: { slug: string } },
-) => Promise<{ success: true } | { success: false; error: string }>;
+export const revokeInvitation = securedOrganizationAction(
+  z.object({
+    id: z.string(),
+  }),
+  async (data, { organization }) => {
+    try {
+      await prisma.organizationInvite.delete({
+        where: {
+          id: data.id,
+          orgId: organization.id,
+        },
+      });
 
-export const revokeInvitation: RevokeHandler = async (
-  organizationId,
-  invitation,
-) => {
-  try {
-    await authorizedOrganization({ id: organizationId }, ["OWNER"]);
-
-    await prisma.organizationInvite.delete({
-      where: {
-        id: invitation.id,
-        orgId: organizationId,
-      },
-    });
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      error: "Error removing invitation",
-    };
-  }
-};
-
-type RemoveMemberHandler = (
-  organizationId: string,
-  member: OrganizationMember & { organization: { slug: string } },
-) => Promise<{ success: true } | { success: false; error: string }>;
-
-export const removeMember: RemoveMemberHandler = async (
-  organizationid,
-  member,
-) => {
-  try {
-    const { user } = await authorizedOrganization({ id: organizationid }, [
-      "OWNER",
-    ]);
-
-    if (user.id === member.userId) {
+      return {
+        success: true,
+      };
+    } catch (error) {
+      console.error(error);
       return {
         success: false,
-        error: "You can not remove your self from the organization.",
+        error: "Error removing invitation",
       };
     }
+  },
+);
 
-    await prisma.organizationMember.delete({
-      where: {
-        id: member.id,
-        orgId: organizationid,
-      },
-    });
+export const removeMember = securedOrganizationAction(
+  z.object({
+    id: z.string(),
+  }),
+  async (data, { organization, user }) => {
+    try {
+      const member = await prisma.organizationMember.findFirst({
+        where: {
+          orgId: organization.id,
+          id: data.id,
+        },
+      });
+      if (!member) {
+        return {
+          success: false,
+          error: "Member not found",
+        };
+      }
+      if (user.id === member.userId) {
+        return {
+          success: false,
+          error: "You can not remove your self from the organization.",
+        };
+      }
 
-    return {
-      success: true,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      success: false,
-      error: "Error removing invitation",
-    };
-  }
-};
+      await prisma.organizationMember.delete({
+        where: {
+          id: member.id,
+          orgId: organization.id,
+        },
+      });
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        error: "Error removing invitation",
+      };
+    }
+  },
+);
