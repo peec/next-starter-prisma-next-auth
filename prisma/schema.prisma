@@ -143,6 +143,7 @@ model OrganizationInvite {
   id           String                 @id @default(cuid())
   orgId        String
   email        String
+  seenOnce     Boolean                @default(false)
   role         OrganizationMemberRole @default(MEMBER)
   organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
 

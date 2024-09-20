@@ -10,7 +10,7 @@ export default async function Page() {
     select: { slug: true },
     where: {
       organizationMembers: {
-        every: {
+        some: {
           userId: user.id,
         },
       },

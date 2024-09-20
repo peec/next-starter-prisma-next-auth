@@ -20,6 +20,7 @@ export async function verifyAccount(token: string) {
     include: {
       user: {
         select: {
+          id: true,
           email: true,
         },
       },
@@ -43,7 +44,26 @@ export async function verifyAccount(token: string) {
   }
 
   try {
+    const pendingSeenInvites = await prisma.organizationInvite.findMany({
+      where: { email: verificationToken.user.email, seenOnce: true },
+    });
     await prisma.$transaction(async (tx) => {
+      // When account is verified, if user has already visited invite link from email, we auto add them.
+      for (const pendingInvite of pendingSeenInvites) {
+        await tx.organizationInvite.delete({
+          where: {
+            id: pendingInvite.id,
+          },
+        });
+        await tx.organizationMember.create({
+          data: {
+            orgId: pendingInvite.orgId,
+            userId: verificationToken.user.id,
+            role: pendingInvite.role,
+          },
+        });
+      }
+
       await tx.user.update({
         data: {
           emailVerified: new Date(),

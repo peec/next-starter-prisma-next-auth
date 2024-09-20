@@ -7,10 +7,29 @@ export default async function Invitation({
 }: {
   searchParams?: { [key: string]: string | undefined };
 }) {
+  // @todo probably change to secure token..
   const id = searchParams?.id;
   if (!id) {
     return <p className="text-center">Invalid invitation</p>;
   }
+
+  const anonymousInvite = await prisma.organizationInvite.findFirst({
+    where: {
+      id: id,
+    },
+  });
+
+  if (anonymousInvite) {
+    await prisma.organizationInvite.update({
+      data: {
+        seenOnce: true,
+      },
+      where: {
+        id: id,
+      },
+    });
+  }
+
   const auth = await authenticated({ callbackUrl: `/invitation?id=${id}` });
 
   const invite = await prisma.organizationInvite.findFirst({

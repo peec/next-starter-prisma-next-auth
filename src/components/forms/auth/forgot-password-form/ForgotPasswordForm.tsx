@@ -21,8 +21,11 @@ import {
   ForgotPasswordFormDataSchema,
 } from "@/components/forms/auth/forgot-password-form/schema";
 import { handleForgotPasswordAction } from "@/components/forms/auth/forgot-password-form/actions";
+import { useSearchParams } from "next/navigation";
 
 export default function ForgotPasswordForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const [disabled, setDisabled] = useState(false);
@@ -86,7 +89,10 @@ export default function ForgotPasswordForm() {
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account?
-          <Link href="/login" className="underline">
+          <Link
+            href={`/login?callbackUrl=${callbackUrl}`}
+            className="underline"
+          >
             Login
           </Link>
         </div>

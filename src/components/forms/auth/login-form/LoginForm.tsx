@@ -17,16 +17,17 @@ import {
 import React, { useTransition } from "react";
 import { providerMap } from "@/auth.config";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   LoginFormDataInputs,
   LoginFormDataSchema,
 } from "@/components/forms/auth/login-form/schema";
-import { useConfirm, usePrompt } from "@/hooks/alert";
+import { useConfirm } from "@/hooks/alert";
 import { resendVerificationToken } from "@/components/forms/auth/user-verification-form/actions";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [pending, startTransaction] = useTransition();
   const form = useForm<LoginFormDataInputs>({
     resolver: zodResolver(LoginFormDataSchema),
@@ -40,7 +41,6 @@ export default function LoginForm() {
       try {
         const result = await signIn("credentials", {
           ...data,
-          callbackUrl: "/dashboard",
           redirect: false,
         });
         if (result?.error) {
@@ -67,7 +67,7 @@ export default function LoginForm() {
           }
         } else {
           // do full reload
-          window.location.href = "/dashboard";
+          window.location.href = callbackUrl;
         }
       } catch (error) {
         console.log(error);
@@ -110,7 +110,7 @@ export default function LoginForm() {
                 <div className="flex items-center">
                   <FormLabel>Password</FormLabel>
                   <Link
-                    href="/forgot-password"
+                    href={`/forgot-password?callbackUrl=${callbackUrl}`}
                     className="ml-auto inline-block text-sm underline"
                   >
                     Forgot password?
@@ -137,7 +137,7 @@ export default function LoginForm() {
                   className="w-full"
                   onClick={() =>
                     signIn(provider.id, {
-                      callbackUrl: "/dashboard",
+                      callbackUrl,
                     })
                   }
                 >
@@ -148,7 +148,10 @@ export default function LoginForm() {
         </div>
         <div className="mt-4 text-center text-sm">
           Dont have an account?{" "}
-          <Link href="/register" className="underline">
+          <Link
+            href={`/register?callbackUrl=${callbackUrl}`}
+            className="underline"
+          >
             Register
           </Link>
         </div>

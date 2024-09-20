@@ -68,3 +68,19 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?sch
 - Emails goes to console.log instead of actually sending it. ( can be overidden in .env.development )
 - To build locally, use `npm run build-dev`, it does not run prisma migrations, as npm run build will.
 
+
+
+## Flow documentation
+
+How it works.
+
+### Invite member to organization
+
+1. Invite user in org
+2. User gets email
+3. Goes to /invitation?id=xyz 
+4. set invite as seen, if logged in: invite accepted **step 6**, else **step 5**
+5. User creates account or log in.
+   1. user login, if logged in **step 3**
+   2. user create account and verify account by email, auto-accept seen invites on verify account **step 6**
+6. **done**

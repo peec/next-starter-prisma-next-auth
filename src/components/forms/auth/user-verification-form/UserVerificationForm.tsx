@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useState, useTransition } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import {
   resendVerificationToken,
@@ -13,6 +13,8 @@ import { APP_NAME } from "@/settings";
 import { useConfirm } from "@/hooks/alert";
 
 export default function UserVerificationForm({ token }: { token: string }) {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function UserVerificationForm({ token }: { token: string }) {
           title: "Account verified.",
           description: "You may login.",
         });
-        router.push("/login");
+        router.push(`/login?callbackUrl=${callbackUrl}`);
       } else {
         if (res.errorCode === "token_expired") {
           const resend = await confirm({

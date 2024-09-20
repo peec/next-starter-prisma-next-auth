@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import React, { useTransition } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import {
   RegisterFormDataInputs,
@@ -24,6 +24,8 @@ import {
 import { handleRegisterAction } from "@/components/forms/auth/register-form/actions";
 
 export default function RegisterForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
@@ -36,7 +38,7 @@ export default function RegisterForm() {
     startTransaction(async () => {
       const res = await handleRegisterAction(data);
       if (res.success) {
-        router.push(`/login`);
+        router.push(`/login?callbackUrl=${callbackUrl}`);
         toast({
           title: "Verification e-mail sent",
           description:
@@ -128,7 +130,10 @@ export default function RegisterForm() {
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account?
-          <Link href="/login" className="underline">
+          <Link
+            href={`/login?callbackUrl=${callbackUrl}`}
+            className="underline"
+          >
             Login
           </Link>
         </div>
