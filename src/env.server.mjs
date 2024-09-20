@@ -8,7 +8,7 @@ const envSchema = z.object({
   AUTH_GOOGLE_SECRET: z.string().min(1),
   RESEND_API_KEY: z.string().min(1),
   BASE_URL: z.string().min(1),
-  EMAIL_TO_CONSOLE: z.string().optional()
+  EMAIL_TO_CONSOLE: z.string().optional(),
 });
 
 // You can't destruct `process.env` as a regular object, so you have to do it manually here.

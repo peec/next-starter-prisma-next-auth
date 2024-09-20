@@ -1,6 +1,5 @@
 # Nextjs SaaS starter boilerplate
 
-
 Demo: https://next-starter-saas.vercel.app/
 
 A complete setup for SaaS with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
@@ -31,20 +30,20 @@ Customize to your needs.
 ## Getting Started
 
 1. Have a postgres installed, or just use docker:
-    
-    ```
-    docker run --name mypostgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
-    ```
 
-2. Copy `.env` to `.env.local` and change env vars to postgres db etc. 
+   ```
+   docker run --name mypostgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+   ```
+
+2. Copy `.env` to `.env.local` and change env vars to postgres db etc.
    If you dont need google login provider remove respective env vars in `src/env.server.mjs`
 
 3. Install, migrate db and run
-    ```bash
-    npm install
-    npx prisma migrate dev
-    npm run dev
-    ```
+   ```bash
+   npm install
+   npx prisma migrate dev
+   npm run dev
+   ```
 
 ## Organization Models and security concerns
 
@@ -52,7 +51,6 @@ Customize to your needs.
 - Always add where { ...., orgId: orgId }
 - server actions that is to be used against any organizations should use the `securedOrganizationAction` wrapper ( see `src/lib/action-utils.ts`).
 - server actions that requires just authentication should use `securedAction`
-
 
 ## Prisma studio for development
 
@@ -64,11 +62,8 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?sch
 
 ## Development notes
 
-
 - Emails goes to console.log instead of actually sending it. ( can be overidden in .env.development )
 - To build locally, use `npm run build-dev`, it does not run prisma migrations, as npm run build will.
-
-
 
 ## Flow documentation
 
@@ -78,7 +73,7 @@ How it works.
 
 1. Invite user in org
 2. User gets email
-3. Goes to /invitation?id=xyz 
+3. Goes to /invitation?id=xyz
 4. set invite as seen, if logged in: invite accepted **step 6**, else **step 5**
 5. User creates account or log in.
    1. user login, if logged in **step 3**
