@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useState, useTransition } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import {
   resendVerificationToken,
@@ -12,9 +12,13 @@ import {
 import { APP_NAME } from "@/settings";
 import { useConfirm } from "@/hooks/alert";
 
-export default function UserVerificationForm({ token }: { token: string }) {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+export default function UserVerificationForm({
+  token,
+  callbackUrl,
+}: {
+  token: string;
+  callbackUrl: string;
+}) {
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const router = useRouter();

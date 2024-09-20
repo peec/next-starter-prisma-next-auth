@@ -6,6 +6,11 @@ export async function generateMetadata() {
     title: "Forgot password",
   };
 }
-export default function ForgotPasswordPage() {
-  return <ForgotPasswordForm />;
+export default function ForgotPasswordPage({
+  searchParams,
+}: {
+  searchParams?: { callbackUrl: string | undefined };
+}) {
+  const callbackUrl = searchParams?.callbackUrl || "/dashboard";
+  return <ForgotPasswordForm callbackUrl={callbackUrl} />;
 }

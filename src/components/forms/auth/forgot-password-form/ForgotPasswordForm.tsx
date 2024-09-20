@@ -21,11 +21,12 @@ import {
   ForgotPasswordFormDataSchema,
 } from "@/components/forms/auth/forgot-password-form/schema";
 import { handleForgotPasswordAction } from "@/components/forms/auth/forgot-password-form/actions";
-import { useSearchParams } from "next/navigation";
 
-export default function ForgotPasswordForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+export default function ForgotPasswordForm({
+  callbackUrl,
+}: {
+  callbackUrl: string;
+}) {
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const [disabled, setDisabled] = useState(false);

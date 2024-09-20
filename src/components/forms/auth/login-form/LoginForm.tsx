@@ -17,7 +17,6 @@ import {
 import React, { useTransition } from "react";
 import { providerMap } from "@/auth.config";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useSearchParams } from "next/navigation";
 import {
   LoginFormDataInputs,
   LoginFormDataSchema,
@@ -25,9 +24,7 @@ import {
 import { useConfirm } from "@/hooks/alert";
 import { resendVerificationToken } from "@/components/forms/auth/user-verification-form/actions";
 
-export default function LoginForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+export default function LoginForm({ callbackUrl }: { callbackUrl: string }) {
   const [pending, startTransaction] = useTransition();
   const form = useForm<LoginFormDataInputs>({
     resolver: zodResolver(LoginFormDataSchema),

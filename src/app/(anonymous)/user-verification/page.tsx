@@ -14,5 +14,6 @@ export default async function UserVerificationPage({
   searchParams?: { [key: string]: string | undefined };
 }) {
   const token = searchParams?.token || "";
-  return <UserVerificationForm token={token} />;
+  const callbackUrl = searchParams?.callbackUrl || "/dashboard";
+  return <UserVerificationForm callbackUrl={callbackUrl} token={token} />;
 }

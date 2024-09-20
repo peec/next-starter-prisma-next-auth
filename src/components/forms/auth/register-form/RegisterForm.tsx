@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import React, { useTransition } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import {
   RegisterFormDataInputs,
@@ -23,9 +23,7 @@ import {
 } from "@/components/forms/auth/register-form/schema";
 import { handleRegisterAction } from "@/components/forms/auth/register-form/actions";
 
-export default function RegisterForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const router = useRouter();

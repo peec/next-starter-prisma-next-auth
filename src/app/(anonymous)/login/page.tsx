@@ -5,6 +5,11 @@ export async function generateMetadata() {
     title: "Login",
   };
 }
-export default async function LoginPage() {
-  return <LoginForm />;
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: { callbackUrl: string | undefined };
+}) {
+  const callbackUrl = searchParams?.callbackUrl || "/dashboard";
+  return <LoginForm callbackUrl={callbackUrl} />;
 }

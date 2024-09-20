@@ -7,6 +7,11 @@ export async function generateMetadata() {
   };
 }
 
-export default function ForgotPasswordPage() {
-  return <RegisterForm />;
+export default function ForgotPasswordPage({
+  searchParams,
+}: {
+  searchParams?: { callbackUrl: string | undefined };
+}) {
+  const callbackUrl = searchParams?.callbackUrl || "/dashboard";
+  return <RegisterForm callbackUrl={callbackUrl} />;
 }
