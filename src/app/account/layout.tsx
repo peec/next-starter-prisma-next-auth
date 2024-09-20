@@ -4,6 +4,7 @@ import { ArrowLeftIcon, Home, LockOpen, UserPenIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { authenticated } from "@/auth";
 import UserProvider from "@/providers/UserProvider";
+import { createReadableContainerSas } from "@/lib/uploader/azure";
 
 const homeUrl = `/account`;
 const menu: MenuItem[] = [
@@ -28,9 +29,13 @@ const menu: MenuItem[] = [
 ];
 export default async function Layout({ children }: { children: ReactNode }) {
   const { user, hasPassword } = await authenticated();
+  const sasToken = createReadableContainerSas({
+    containerName: "global",
+  });
   return (
-    <UserProvider user={user} hasPassword={hasPassword}>
+    <UserProvider sasToken={sasToken} user={user} hasPassword={hasPassword}>
       <AuthenticatedLayout
+        sasToken={sasToken}
         title="Account"
         user={user}
         homeUrl={homeUrl}

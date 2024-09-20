@@ -65,6 +65,24 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?sch
 - Emails goes to console.log instead of actually sending it. ( can be overidden in .env.development )
 - To build locally, use `npm run build-dev`, it does not run prisma migrations, as npm run build will.
 
+## File uploads
+
+- Azure blob storage is used for file uploads. 
+- Organization files: Each tenant will store its files under `org-${orgId}` and sas token is used for access, which means files uploaded in a organization can only be accessed when logged into a specific organization.
+- Global files: (e.g. account profile pictures is not scoped to organization) and thus available to all logged in users, regardless of organization.
+
+
+### Get started with uploads
+
+- Create a new Storage account (blob storage) in azure.
+
+Configure these env vars to enable uploads:
+
+```
+AZURE_STORAGE_ACCOUNT_NAME=myappstore
+AZURE_STORAGE_ACCOUNT_KEY={in azure portal: key from Storage account -> my storage -> security + networking -> access keys -> key1}
+```
+
 ## Flow documentation
 
 How it works.

@@ -1,11 +1,10 @@
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpdateProfileForm from "@/components/forms/account/user-profile-form/UpdateProfileForm";
 import { prisma } from "@/lib/prisma";
 import { authenticated } from "@/auth";
-import { Pencil, UserCheck } from "lucide-react";
+import { UserCheck } from "lucide-react";
 import { providerMap } from "@/auth.config";
 import PageTitle from "@/components/layout/PageTitle";
+import ProfilePictureUploader from "@/components/account/ProfilePictureUploader";
 
 export default async function AccountSettings() {
   const { user } = await authenticated();
@@ -25,27 +24,7 @@ export default async function AccountSettings() {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">
-            <Avatar className="h-40 w-40">
-              <AvatarImage src={""} alt={user.name || ""} />
-              <AvatarFallback className="text-4xl">
-                {(user.name || "")
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
-            <Label
-              htmlFor="avatar-upload"
-              className="absolute bottom-0 right-0 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full p-2 cursor-pointer transition-colors"
-            >
-              <Pencil className="h-6 w-6" />
-              <input
-                id="avatar-upload"
-                type="file"
-                className="sr-only"
-                accept="image/*"
-              />
-            </Label>
+            <ProfilePictureUploader />
           </div>
           <p className="text-sm text-muted-foreground">
             Click the pencil to change your avatar @todo does not work yet. add

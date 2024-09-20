@@ -6,6 +6,7 @@ import { MenuItem } from "@/components/layout/types";
 import OrganizationSelector from "@/components/layout/OrganizationSelector";
 import { AuthenticatedLayout } from "@/components/layout/AuthenticatedLayout";
 import { Input } from "@/components/ui/input";
+import { SasToken } from "@/lib/uploader/types";
 
 export function DashboardLayout({
   children,
@@ -13,12 +14,14 @@ export function DashboardLayout({
   user,
   organizationMember,
   organizations,
+  authSasToken,
 }: {
   organizationMember: OrganizationMember;
   user: Omit<User, "password">;
   children: ReactNode;
   organization: Organization;
   organizations: Organization[];
+  authSasToken: SasToken | null;
 }) {
   const orgUrl = `/dashboard/${organization.slug}`;
   const menu: MenuItem[] = [
@@ -39,6 +42,7 @@ export function DashboardLayout({
 
   return (
     <AuthenticatedLayout
+      sasToken={authSasToken}
       homeUrl={orgUrl}
       user={user}
       sidebarBottom={

@@ -119,6 +119,7 @@ model Organization {
   subscription        OrganizationSubscription? @relation(fields: [subscriptionId], references: [id], onUpdate: NoAction)
   organizationMembers OrganizationMember[]
   invites             OrganizationInvite[]
+  image               String?
 
   @@index([slug])
 }

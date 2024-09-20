@@ -2,8 +2,9 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { authorizedOrganization } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import OrganizationProvider from "@/providers/OrganizationProvider";
+import { createReadableContainerSas } from "@/lib/uploader/azure";
 
-export default async function RootLayout({
+export default async function OrgLayout({
   params: { orgSlug },
   children,
 }: Readonly<{
@@ -21,12 +22,20 @@ export default async function RootLayout({
       },
     },
   });
+  const orgSasToken = createReadableContainerSas({
+    containerName: `org-${organization.id}`,
+  });
+  const authSasToken = createReadableContainerSas({
+    containerName: "global",
+  });
   return (
     <OrganizationProvider
+      sasToken={orgSasToken}
       organization={organization}
       organizationMember={organizationMember}
     >
       <DashboardLayout
+        authSasToken={authSasToken}
         organizationMember={organizationMember}
         user={user}
         organization={organization}

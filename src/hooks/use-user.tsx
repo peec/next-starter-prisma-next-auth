@@ -9,5 +9,6 @@ export function useUser() {
   return {
     user: context.user,
     hasPassword: context.hasPassword,
+    sasToken: context.sasToken,
   };
 }

@@ -9,6 +9,8 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().min(1),
   BASE_URL: z.string().min(1),
   EMAIL_TO_CONSOLE: z.string().optional(),
+  AZURE_STORAGE_ACCOUNT_NAME: z.string().optional(),
+  AZURE_STORAGE_ACCOUNT_KEY: z.string().optional(),
 });
 
 // You can't destruct `process.env` as a regular object, so you have to do it manually here.
@@ -23,4 +25,6 @@ export const serverEnv = envSchema.parse({
   BASE_URL:
     process.env.BASE_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ""),
+  AZURE_STORAGE_ACCOUNT_NAME: process.env.AZURE_STORAGE_ACCOUNT_NAME,
+  AZURE_STORAGE_ACCOUNT_KEY: process.env.AZURE_STORAGE_ACCOUNT_KEY,
 });
