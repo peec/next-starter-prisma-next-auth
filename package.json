@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "prisma migrate deploy && next build",
-    "build-dev": "next build",
+    "build": "prettier --check . && prisma migrate deploy && next build",
+    "build-dev": "prettier --check . && next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate"
