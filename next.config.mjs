@@ -2,12 +2,12 @@
 // validate env vars
 import "./src/env.server.mjs";
 const nextConfig = {
-
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: process.env.AZURE_STORAGE_ACCOUNT_NAME + '.blob.core.windows.net',
+        protocol: "https",
+        hostname:
+          process.env.AZURE_STORAGE_ACCOUNT_NAME + ".blob.core.windows.net",
       },
     ],
   },
