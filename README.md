@@ -23,7 +23,7 @@ Customize to your needs.
 - [x] Invite members to organization.
 - [x] Organization settings for changing org-name.
 - [x] User profile management with change password feature / set password, show providers.
-- [ ] File uploads ( avatar in user-profile and more.. ) Azure Blob storage?
+- [x] File uploads ( avatar in user-profile and more.. ) Azure Blob storage?
 - [ ] Delete organization
 - [ ] Stripe for automated billing(?)
 
@@ -67,10 +67,9 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?sch
 
 ## File uploads
 
-- Azure blob storage is used for file uploads. 
+- Azure blob storage is used for file uploads.
 - Organization files: Each tenant will store its files under `org-${orgId}` and sas token is used for access, which means files uploaded in a organization can only be accessed when logged into a specific organization.
 - Global files: (e.g. account profile pictures is not scoped to organization) and thus available to all logged in users, regardless of organization.
-
 
 ### Get started with uploads
 

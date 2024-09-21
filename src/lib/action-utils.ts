@@ -1,4 +1,4 @@
-import z, { ZodSchema } from "zod";
+import z, { ZodError, ZodIssue, ZodSchema } from "zod";
 import { authenticated, authorizedOrganization } from "@/auth";
 import { OrganizationMemberRole } from "@prisma/client";
 
@@ -33,7 +33,7 @@ export function securedOrganizationAction<
         options.requiredRoles,
         { action: true },
       );
-      const inputRequest = schema.safeParse(values);
+      const inputRequest = await schema.safeParseAsync(values);
       if (!inputRequest.success) {
         return {
           success: false,
@@ -77,11 +77,58 @@ export function securedAction<
     try {
       const auth = await authenticated({ action: true });
 
-      const inputRequest = schema.safeParse(values);
+      const inputRequest = await schema.safeParseAsync(values);
       if (!inputRequest.success) {
         return {
           success: false,
           error: inputRequest.error.message,
+        };
+      }
+      const data = inputRequest.data;
+
+      return action(data, auth);
+    } catch (err) {
+      console.error(err);
+      return {
+        success: false,
+        error: "Unauthorized",
+      };
+    }
+  };
+}
+
+export function securedFormAction<
+  T extends ZodSchema,
+  SuccessData extends { success: true } = { success: true },
+  ErrorData extends { success: false; error: string } = {
+    success: false;
+    error: string;
+  },
+>(
+  schema: T,
+  action: (
+    data: z.infer<T>,
+    auth: Awaited<ReturnType<typeof authenticated>>,
+  ) => Promise<
+    (SuccessData & { success: true }) | (ErrorData & { success: false })
+  >,
+) {
+  return async function (values: FormData): Promise<
+    | (SuccessData & { success: true })
+    | (ErrorData & {
+        success: false;
+        validation?: ZodIssue[];
+      })
+  > {
+    try {
+      const auth = await authenticated({ action: true });
+
+      const inputRequest = await schema.safeParseAsync(values);
+      if (!inputRequest.success) {
+        return {
+          success: false,
+          error: inputRequest.error.message,
+          validation: inputRequest.error.issues,
         };
       }
       const data = inputRequest.data;
