@@ -2,17 +2,23 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
-import { Pencil } from "lucide-react";
-import { useUser } from "@/hooks/use-user";
+import { ImageIcon, Pencil } from "lucide-react";
 import React, { useRef, useTransition } from "react";
 import { imageUrlFor } from "@/lib/uploader/url";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { uploadProfilePicture } from "@/uploads";
+import { uploadOrganizationLogo } from "@/uploads";
+import { Organization } from "@prisma/client";
+import { useOrganization } from "@/hooks/use-organization";
+import Image from "next/image";
 
-export default function ProfilePictureUploader() {
-  const { user, sasToken } = useUser();
+export default function LogoUploader({
+  organization,
+}: {
+  organization: Organization;
+}) {
+  const { sasToken } = useOrganization();
   const { toast } = useToast();
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -28,12 +34,15 @@ export default function ProfilePictureUploader() {
           ref={ref}
           action={async (formData) => {
             start(async () => {
-              const res = await uploadProfilePicture(formData);
+              const res = await uploadOrganizationLogo(
+                organization.id,
+                formData,
+              );
               if (res.success) {
                 ref.current?.reset();
                 router.refresh();
                 toast({
-                  description: "Updated profile picture",
+                  description: "Updated logo",
                 });
               } else {
                 if (res.validation) {
@@ -53,18 +62,25 @@ export default function ProfilePictureUploader() {
             });
           }}
         >
-          <Avatar className="h-40 w-40">
-            <AvatarImage
-              src={imageUrlFor(user.image, sasToken) || ""}
-              alt={user.name || user.email}
-            />
-            <AvatarFallback className="text-4xl">
-              {(user.name || user.email)
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
+          {organization.image ? (
+            <div className="h-52 w-52 bg-primary-foreground p-8 flex justify-center items-center">
+              <Image
+                src={imageUrlFor(organization.image, sasToken, true) || ""}
+                alt={organization.name}
+                width="0"
+                height="0"
+                sizes="100vw"
+                className="w-full h-auto"
+              />
+            </div>
+          ) : (
+            <Avatar className="h-40 w-40">
+              <AvatarFallback>
+                <ImageIcon className="w-16 h-16 text-muted-foreground" />
+              </AvatarFallback>
+            </Avatar>
+          )}
+
           <Label
             htmlFor="avatar-upload"
             className="absolute bottom-0 right-0 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full p-2 cursor-pointer transition-colors"
@@ -87,7 +103,7 @@ export default function ProfilePictureUploader() {
         </form>
       </div>
       <p className="text-sm text-muted-foreground">
-        Click the pencil to change your avatar
+        Click the pencil to change your logo
       </p>
     </div>
   );

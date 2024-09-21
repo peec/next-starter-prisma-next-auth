@@ -64,6 +64,11 @@ export async function uploadFiles(
     imageCompress?: (sharp: Sharp, file: File) => Sharp;
     fileExtension?: string;
     mimeType?: string;
+    /**
+     * Heads up, if true, container created will have all files public.
+     * Requires "Allow Blob anonymous access" in azure storage account settings.
+     */
+    public?: boolean;
   } = {},
 ) {
   const blobService = new BlobServiceClient(
@@ -79,8 +84,16 @@ export async function uploadFiles(
     console.error(type);
     throw new Error(`type not supported in uploader`);
   }
+
+  if (uploaderOptions.public) {
+    containerName = `pub-${containerName}`;
+  }
+
   const containerClient: ContainerClient =
     blobService.getContainerClient(containerName);
+  await containerClient.createIfNotExists({
+    access: uploaderOptions.public ? "blob" : undefined,
+  });
 
   const promise = await Promise.allSettled(
     files.map(async (file) => {

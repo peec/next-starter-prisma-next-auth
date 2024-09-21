@@ -25,7 +25,8 @@ export function securedOrganizationAction<
     organizationId: string,
     values: unknown,
   ): Promise<
-    (SuccessData & { success: true }) | (ErrorData & { success: false })
+    | (SuccessData & { success: true })
+    | (ErrorData & { success: false; validation?: ZodIssue[] })
   > {
     try {
       const organizationContext = await authorizedOrganization(

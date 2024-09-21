@@ -22,15 +22,7 @@ export default async function AccountSettings() {
         description="Make changes to your profile here."
       />
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="relative">
-            <ProfilePictureUploader />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Click the pencil to change your avatar @todo does not work yet. add
-            backend logic for it.
-          </p>
-        </div>
+        <ProfilePictureUploader />
         <div className="space-y-4">
           <div className="space-y-2">
             <UpdateProfileForm />

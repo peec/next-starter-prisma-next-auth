@@ -8,5 +8,5 @@ export function useOrganization() {
   if (!organization || !organizationMember) {
     throw new Error(`UserProvider must be at the parent level`);
   }
-  return { organization, organizationMember };
+  return { organization, organizationMember, sasToken: context.sasToken };
 }
