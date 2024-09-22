@@ -7,6 +7,7 @@ import OrganizationSelector from "@/components/layout/OrganizationSelector";
 import { AuthenticatedLayout } from "@/components/layout/AuthenticatedLayout";
 import { Input } from "@/components/ui/input";
 import { SasToken } from "@/lib/uploader/types";
+import Image from "next/image";
 
 export function DashboardLayout({
   children,
@@ -52,16 +53,23 @@ export function DashboardLayout({
         />
       }
       header={
-        <form>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search ..."
-              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-            />
+        <>
+          <div className="flex items-center gap-2">
+            {organization.image ? (
+              <Image
+                src={organization.image}
+                alt={organization.name}
+                width={100}
+                height="0"
+                className="h-7 w-auto my-auto"
+              />
+            ) : (
+              <span className="hidden sm:block text-muted-foreground text-sm font-semibold">
+                {organization.name}
+              </span>
+            )}
           </div>
-        </form>
+        </>
       }
       menu={menu.filter(
         (item) =>
