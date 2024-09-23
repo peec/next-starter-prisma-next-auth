@@ -91,9 +91,9 @@ export default function InviteMemberForm({
                       <SelectValue placeholder={t("roleSelectPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="OWNER">{t("roles.owner")}</SelectItem>
+                      <SelectItem value="OWNER">{t("roles.OWNER")}</SelectItem>
                       <SelectItem value="MEMBER">
-                        {t("roles.member")}
+                        {t("roles.MEMBER")}
                       </SelectItem>
                     </SelectContent>
                   </Select>
