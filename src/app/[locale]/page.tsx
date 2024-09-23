@@ -110,19 +110,19 @@ export default function LandingPage() {
           </Link>
           <nav className="flex gap-4 sm:gap-6">
             <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
+              className="text-sm font-medium hover:underline underline-offset-4 hidden md:block"
               href="#features"
             >
               Features
             </Link>
             <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
+              className="text-sm font-medium hover:underline underline-offset-4 hidden md:block"
               href="#pricing"
             >
               Pricing
             </Link>
             <Link
-              className="text-sm font-medium hover:underline underline-offset-4"
+              className="text-sm font-medium hover:underline underline-offset-4 hidden md:block"
               href="#faq"
             >
               FAQ
