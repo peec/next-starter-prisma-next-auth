@@ -3,7 +3,7 @@ import authConfig from "./auth.config";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/routing";
 import { OrganizationMemberRole } from "@prisma/client";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -41,6 +41,7 @@ export async function authenticated(
       throw new Error("unauthorized");
     }
     redirect(redirectTo);
+    throw new Error("unauthorized");
   }
 
   if (!session?.user?.email) {
@@ -52,13 +53,18 @@ export async function authenticated(
       throw new Error("unauthorized");
     }
     redirect(redirectTo);
+    throw new Error("unauthorized");
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
   });
   if (!user) {
+    if (action) {
+      throw new Error("unauthorized");
+    }
     redirect(redirectTo);
+    throw new Error("unauthorized");
   }
   // avoid leaking password though app
   const { password, ...userWithoutPassword } = user;
@@ -101,6 +107,7 @@ export async function authorizedOrganization(
       throw new Error("unauthorized");
     }
     redirect(`/error/no-access}`);
+    throw new Error("unauthorized");
   }
 
   const organization = await prisma.organization.findFirst({
@@ -127,6 +134,7 @@ export async function authorizedOrganization(
       throw new Error("unauthorized");
     }
     redirect(`/error/no-access}`);
+    throw new Error("unauthorized");
   }
 
   if (requiredRoles && !requiredRoles.includes(organizationMember.role)) {
@@ -134,6 +142,7 @@ export async function authorizedOrganization(
       throw new Error("unauthorized");
     }
     redirect(`/dashboard/${organization.slug}/error/unauthorized`);
+    throw new Error("unauthorized");
   }
 
   return {

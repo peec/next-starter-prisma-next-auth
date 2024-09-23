@@ -10,34 +10,42 @@ import {
 } from "@/email/EmailLayout";
 import { APP_NAME } from "@/settings";
 import { Organization, OrganizationInvite } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
-export const OrganizationInvitation = ({
+export const OrganizationInvitation = async ({
   organization,
   invitation,
 }: {
   organization: Organization;
   invitation: OrganizationInvite;
-}) => (
-  <EmailLayout>
-    <Preview>
-      You have been invited to join organization {organization.name} on{" "}
-      {APP_NAME}
-    </Preview>
-    <Text style={title}>
-      You have been invited to join organization {organization.name} on{" "}
-      {APP_NAME}
-    </Text>
+}) => {
+  const t = await getTranslations("emails.organization-invitation");
+  return (
+    <EmailLayout>
+      <Preview>
+        {t("preview", {
+          organizationName: organization.name,
+          appName: APP_NAME,
+        })}
+      </Preview>
+      <Text style={title}>
+        {t("preview", {
+          organizationName: organization.name,
+          appName: APP_NAME,
+        })}
+      </Text>
 
-    <Section style={section}>
-      <Text style={text}>To accept the invitation click the link below.</Text>
-      <Link
-        href={`${emailBaseUrl}/invitation?id=${invitation.id}`}
-        style={button}
-      >
-        Accept invitation
-      </Link>
-    </Section>
-  </EmailLayout>
-);
+      <Section style={section}>
+        <Text style={text}>{t("instructions")}</Text>
+        <Link
+          href={`${emailBaseUrl}/invitation?id=${invitation.id}`}
+          style={button}
+        >
+          {t("acceptInvitation")}
+        </Link>
+      </Section>
+    </EmailLayout>
+  );
+};
 
 export default OrganizationInvitation;

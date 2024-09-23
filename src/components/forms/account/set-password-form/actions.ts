@@ -4,10 +4,12 @@ import { prisma } from "@/lib/prisma";
 import { securedAction } from "@/lib/action-utils";
 import { setPasswordFormSchema } from "@/components/forms/account/set-password-form/form";
 import { compare, hash } from "bcryptjs";
+import { getTranslations } from "next-intl/server";
 
 export const updatePassword = securedAction(
   setPasswordFormSchema,
   async function (data, { user }) {
+    const t = await getTranslations("forms.set-password-form");
     try {
       const userWithPassword = await prisma.user.findFirstOrThrow({
         where: { id: user.id },
@@ -23,7 +25,7 @@ export const updatePassword = securedAction(
       ) {
         return {
           success: false,
-          error: "Existing password is wrong",
+          error: t("errors.wrong_password"),
         };
       }
 
@@ -43,7 +45,7 @@ export const updatePassword = securedAction(
       console.error(error);
       return {
         success: false,
-        error: "Error while updating password",
+        error: t("errors.unknown_error"),
       };
     }
   },

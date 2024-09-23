@@ -3,11 +3,12 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ReactNode, useState } from "react";
 import { Organization, OrganizationMember } from "@prisma/client";
 import { MenuItem } from "@/components/layout/types";
 import OrganizationSelector from "@/components/layout/OrganizationSelector";
+import { useTranslations } from "next-intl";
 
 export default function MobileMenu({
   menu,
@@ -16,6 +17,7 @@ export default function MobileMenu({
   menu: Omit<MenuItem, "roles">[];
   sidebarBottom?: ReactNode;
 }) {
+  const t = useTranslations("layout");
   const [open, setOpen] = useState(false);
 
   return (
@@ -23,7 +25,7 @@ export default function MobileMenu({
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="shrink-0 md:hidden">
           <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle navigation menu</span>
+          <span className="sr-only">{t("toggleNavMenu")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col">

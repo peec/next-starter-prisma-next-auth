@@ -19,7 +19,7 @@ export const EmailLayout = ({ children }: { children: ReactNode }) => (
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${emailBaseUrl}/logo-email.jpg`}
+          src={`${emailBaseUrl}/static/logo-email.jpg`}
           width="60"
           height="60"
           alt="Logo"

@@ -26,14 +26,18 @@ import { Organization } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { inviteMember } from "@/components/forms/organization/member/invite-member-form/actions";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function InviteMemberForm({
   organization,
 }: {
   organization: Organization;
 }) {
+  const t = useTranslations("forms.invite-member-form");
   const { toast } = useToast();
   const router = useRouter();
+  useI18nZodErrors();
   const form = useForm<z.infer<typeof inviteMemberFormSchema>>({
     resolver: zodResolver(inviteMemberFormSchema),
     defaultValues: {
@@ -47,8 +51,8 @@ export default function InviteMemberForm({
       router.refresh();
       form.reset();
       toast({
-        title: "Member invited",
-        description: "Member invited to the team, an email has been sent.",
+        title: t("successToast.title"),
+        description: t("successToast.description"),
       });
     } else {
       toast({
@@ -66,13 +70,11 @@ export default function InviteMemberForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>{t("emailLabel")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="user@mail.com" {...field} />
+                  <Input placeholder={t("emailPlaceholder")} {...field} />
                 </FormControl>
-                <FormDescription>
-                  Enter the e-mail of the person to invite.
-                </FormDescription>
+                <FormDescription>{t("emailDescription")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -82,27 +84,26 @@ export default function InviteMemberForm({
             name="role"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Role</FormLabel>
+                <FormLabel>{t("roleLabel")}</FormLabel>
                 <FormControl>
                   <Select {...field} onValueChange={field.onChange}>
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Slect a role" />
+                      <SelectValue placeholder={t("roleSelectPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="OWNER">Owner</SelectItem>
-                      <SelectItem value="MEMBER">Member</SelectItem>
+                      <SelectItem value="OWNER">{t("roles.owner")}</SelectItem>
+                      <SelectItem value="MEMBER">
+                        {t("roles.member")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormDescription>
-                  OWNER role has full access, MEMBER role can not administrate
-                  members.
-                </FormDescription>
+                <FormDescription>{t("roleDescription")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Invite User</Button>
+          <Button type="submit">{t("submitButton")}</Button>
         </div>
       </form>
     </Form>

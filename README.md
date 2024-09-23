@@ -2,11 +2,12 @@
 
 Demo: https://next-starter-saas.vercel.app/
 
-A complete setup for SaaS with prisma, next-auth@5, nextjs 14.x for authentication and authorization.
+A complete setup for SaaS with prisma, next-intl, next-auth@5, nextjs 14.x for authentication and authorization.
 
 Customize to your needs.
 
 - Nextjs 14.x
+- next-intl (i18n)
 - Prisma
 - Next-auth (v5)
 - Shadcn
@@ -15,6 +16,7 @@ Customize to your needs.
 
 ## Features (and upcoming features):
 
+- [x] i18n (next-intl). English and norwegian out of the box. Add your language and submit a PR.
 - [x] Login with credentials
 - [x] Password reset
 - [x] Registration with required verify account by email
@@ -24,6 +26,9 @@ Customize to your needs.
 - [x] Organization settings for changing org-name.
 - [x] User profile management with change password feature / set password, show providers.
 - [x] File uploads ( avatar in user-profile and more.. ) Azure Blob storage?
+
+### Plans (maybe)
+
 - [ ] Delete organization
 - [ ] Stripe for automated billing(?)
 
@@ -72,6 +77,8 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/boilerplate-next?sch
 - Global files: (e.g. account profile pictures is not scoped to organization) and thus available to all logged in users, regardless of organization.
 
 ### Get started with uploads
+
+We decided to use Azure Blob Storage, sas tokens are great for protecting files, keeping files scoped to organization.
 
 - Create a new Storage account (blob storage) in azure.
 

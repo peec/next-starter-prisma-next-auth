@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { CircleUser, Package2, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,9 @@ import { ThemeModeToggle } from "@/components/layout/ThemeModeToggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { imageUrlFor } from "@/lib/uploader/url";
 import { SasToken } from "@/lib/uploader/types";
+import { getTranslations } from "next-intl/server";
 
-export function AuthenticatedLayout({
+export async function AuthenticatedLayout({
   children,
   user,
   menu,
@@ -40,6 +41,7 @@ export function AuthenticatedLayout({
   title?: string;
   sasToken: SasToken | null;
 }) {
+  const t = await getTranslations("layout");
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r border-accent bg-muted/40 md:block">
@@ -92,15 +94,13 @@ export function AuthenticatedLayout({
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <span className="sr-only">Toggle user menu</span>
+                <span className="sr-only">{t("toggleUserMenu")}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{user.name || user.email}</DropdownMenuLabel>
-              <DropdownMenuItem asChild>
-                <Link href="/account">
-                  <span>Manage profile</span>
-                </Link>
+              <DropdownMenuItem>
+                <Link href="/account">{t("manageProfile")}</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
@@ -111,7 +111,7 @@ export function AuthenticatedLayout({
                   }}
                 >
                   <button type="submit" className="w-full text-left">
-                    Sign Out
+                    {t("signOut")}
                   </button>
                 </form>
               </DropdownMenuItem>

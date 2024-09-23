@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -22,11 +22,15 @@ import {
   RegisterFormDataSchema,
 } from "@/components/forms/auth/register-form/schema";
 import { handleRegisterAction } from "@/components/forms/auth/register-form/actions";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
+  const t = useTranslations("forms.register-form");
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
+  useI18nZodErrors();
   const form = useForm<RegisterFormDataInputs>({
     resolver: zodResolver(RegisterFormDataSchema),
     defaultValues: { name: "", email: "", password: "", confirm_password: "" },
@@ -38,9 +42,8 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
       if (res.success) {
         router.push(`/login?callbackUrl=${callbackUrl}`);
         toast({
-          title: "Verification e-mail sent",
-          description:
-            "In order to login, go to your email and verify your account.",
+          title: t("toast.verificationEmailSent.title"),
+          description: t("toast.verificationEmailSent.description"),
         });
       } else {
         if (res.errorCode === "account_exist") {
@@ -51,7 +54,7 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
         } else {
           toast({
             variant: "destructive",
-            title: "Error",
+            title: t("toast.error.title"),
             description: res.error,
           });
         }
@@ -63,9 +66,9 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(processForm)}>
         <div className="grid gap-2 text-center">
-          <h1 className="text-3xl font-bold">Register</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-balance text-muted-foreground">
-            Get started for free
+            {t("description")}
           </p>
         </div>
         <div className="grid gap-4 mt-4">
@@ -74,7 +77,7 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Your full name</FormLabel>
+                <FormLabel>{t("nameLabel")}</FormLabel>
                 <FormControl>
                   <Input autoFocus type="text" {...field} />
                 </FormControl>
@@ -87,7 +90,7 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>{t("emailLabel")}</FormLabel>
                 <FormControl>
                   <Input autoFocus type="text" {...field} />
                 </FormControl>
@@ -100,7 +103,7 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("passwordLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -113,7 +116,7 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             name="confirm_password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm password</FormLabel>
+                <FormLabel>{t("confirmPasswordLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -122,17 +125,17 @@ export default function RegisterForm({ callbackUrl }: { callbackUrl: string }) {
             )}
           />
           <Button type="submit" className="w-full" disabled={pending}>
-            Register
+            {t("registerButton")}
             {pending && <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Already have an account?
+          {t("loginText")}{" "}
           <Link
             href={`/login?callbackUrl=${callbackUrl}`}
             className="underline"
           >
-            Login
+            {t("loginLink")}
           </Link>
         </div>
       </form>

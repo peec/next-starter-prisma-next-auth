@@ -11,8 +11,10 @@ import { generateResetToken } from "@/lib/crypto";
 import { sendEmail } from "@/lib/email";
 import { APP_NAME } from "@/settings";
 import { WelcomeRegistration } from "@/email/auth/WelcomeRegistation";
+import { getTranslations } from "next-intl/server";
 
 export async function verifyAccount(token: string) {
+  const t = await getTranslations("forms.user-verification-form");
   const verificationToken = await prisma.userVerificationToken.findFirst({
     where: {
       token,
@@ -29,7 +31,7 @@ export async function verifyAccount(token: string) {
   if (!verificationToken) {
     return {
       success: false,
-      error: "Verification token does not exist, already verified?",
+      error: t("errors.token_does_not_exist"),
       errorCode: "token_does_not_exist",
     } as const;
   }
@@ -37,7 +39,7 @@ export async function verifyAccount(token: string) {
   if (isPasswordResetTokenExpired(verificationToken)) {
     return {
       success: false,
-      error: "Verification token expired",
+      error: t("errors.token_expired"),
       errorCode: "token_expired",
       email: verificationToken.user.email,
     } as const;
@@ -80,7 +82,8 @@ export async function verifyAccount(token: string) {
     console.error(error);
     return {
       succes: false,
-      error: "Server error",
+      errorCode: "unknown_error",
+      error: t("errors.unknown_error"),
     } as const;
   }
 
@@ -90,23 +93,28 @@ export async function verifyAccount(token: string) {
 }
 
 export async function resendVerificationToken(email: string) {
+  const t = await getTranslations("actions.resendVerificationToken");
+  const tWelcomeEmail = await getTranslations("emails.welcome-registration");
   const user = await prisma.user.findFirst({ where: { email } });
   if (!user) {
     return {
       success: false,
-      error: "User does not exit",
+      errorCode: "account_not_found",
+      error: t("errors.account_not_found"),
     };
   }
   if (user.password === null) {
     return {
       success: false,
-      error: "User has no credentails",
+      errorCode: "no_password",
+      error: t("errors.no_password"),
     };
   }
   if (user.emailVerified) {
     return {
       success: false,
-      error: "User is already verified",
+      errorCode: "email_not_verified",
+      error: t("errors.email_not_verified"),
     };
   }
 
@@ -130,8 +138,8 @@ export async function resendVerificationToken(email: string) {
       });
       await sendEmail({
         to: user.email,
-        subject: `Verify your account on ${APP_NAME}`,
-        body: WelcomeRegistration({
+        subject: tWelcomeEmail("subject", { appName: APP_NAME }),
+        body: await WelcomeRegistration({
           name: user.name || user.email,
           verificationToken: verificationToken,
         }),
@@ -141,7 +149,7 @@ export async function resendVerificationToken(email: string) {
     console.error(error);
     return {
       success: false,
-      error: "Server error",
+      error: t("errors.unknown_error"),
     };
   }
   return {

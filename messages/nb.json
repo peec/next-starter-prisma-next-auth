@@ -1,0 +1,366 @@
+{
+  "organizationRoles": {
+    "OWNER": "Eier",
+    "MEMBER": "Medlem"
+  },
+  "pages": {
+    "dashboard": {
+      "errors": {
+        "error_create_org": "Kunne ikke opprette organisasjonen. Last inn denne siden på nytt."
+      }
+    },
+    "dashboard/error/unauthorized": {
+      "message": "Du er uautorisert for denne handlingen"
+    },
+    "dashboard/settings": {
+      "title": "Organisasjonsinnstillinger",
+      "description": "Administrer organisasjonen din her"
+    },
+    "dashboard/members": {
+      "title": "Administrer medlemmer",
+      "description": "Administrer eksisterende brukere og inviter nye til organisasjonen din.",
+      "buttons": { "inviteMember": "Inviter medlem" },
+      "inviteDialog": {
+        "title": "Inviter ny bruker",
+        "description": "Fyll inn detaljene for å invitere en ny bruker til organisasjonen din."
+      }
+    },
+    "forgot-password": { "title": "Glemt passord" },
+    "login": { "title": "Logg inn" },
+    "register": { "title": "Register" },
+    "reset-password": { "title": "Tilbakestill passord" },
+    "user-verification": { "title": "Brukerbekreftelse" },
+    "invitation": {
+      "errors": {
+        "id_not_found": "Ugyldig invitasjon",
+        "invite_not_found": "Invitasjonsfeil, kunne ikke bli med i organisasjonen",
+        "unknown_error": "Invitasjonsfeil, kunne ikke bli med i organisasjonen"
+      }
+    },
+    "error/no-access": {
+      "title": "Du har ikke tilgang til denne organisasjonen"
+    },
+    "account": {
+      "title": "Kontoinnstillinger",
+      "description": "Gjør endringer i profilen din her.",
+      "connectedAccounts": {
+        "title": "Tilknyttede kontoer",
+        "empty": "Ingen tilkoblede kontoer",
+        "connected": "Tilkoblet"
+      }
+    },
+    "account/password": {
+      "title": "Endre passord",
+      "description": "Endre eller angi et passord for kontoen din."
+    }
+  },
+  "uploads": {
+    "validation": {
+      "image-type": "Filformatet må være enten jpg, jpeg, webp eller png.",
+      "size": "Filen kan ikke være større enn {maxSizeMb}MB."
+    }
+  },
+  "forms": {
+    "update-profile-form": {
+      "form": {
+        "fullName": { "label": "Fullt navn", "placeholder": "Mitt navn" },
+        "email": {
+          "label": "E-post",
+          "note": "E-postadressen din kan ikke endres"
+        },
+        "button": { "submit": "Lagre" }
+      },
+      "toast": { "success": { "title": "Profilen ble oppdatert" } },
+      "errors": { "unknown_error": "Feil under oppdatering av profil" }
+    },
+    "profile-picture-uploader": {
+      "instructions": "Klikk på blyanten for å endre avataren din",
+      "toastMessages": { "success": { "description": "Oppdatert avatar" } }
+    },
+    "logo-uploader": {
+      "instructions": "Klikk på blyanten for å endre logoen din",
+      "toastMessages": {
+        "success": { "description": "Oppdatert organisasjonslogo" }
+      }
+    },
+    "edit-organization-form": {
+      "fields": {
+        "name": {
+          "label": "Organisasjonsnavn",
+          "placeholder": "Acme Inc",
+          "description": "Navn på organisasjonen din"
+        }
+      },
+      "buttons": { "submit": "Lagre" },
+      "toastMessages": {
+        "success": { "description": "Oppdaterte organisasjonsinnstillinger" }
+      },
+      "errors": { "unknown_error": "Feil ved opprettelse av invitasjon" }
+    },
+    "invite-member-form": {
+      "emailLabel": "E-post",
+      "emailPlaceholder": "meg@mail.com",
+      "emailDescription": "Skriv inn e-postadressen til personen du vil invitere.",
+      "roleLabel": "Rolle",
+      "roleDescription": "EIER-rollen har full tilgang. MEDLEMSrollen har begrenset tilgang",
+      "roleSelectPlaceholder": "Velg en rolle",
+      "roles": { "OWNER": "Eier", "MEMBER": "Medlem" },
+      "successToast": {
+        "title": "Medlem invitert",
+        "description": "Medlem invitert til laget, en e-post er sendt."
+      },
+      "submitButton": "Inviter bruker",
+      "errors": { "unknown_error": "Feil ved opprettelse av invitasjon" }
+    },
+    "set-password-form": {
+      "title": "Angi passord",
+      "currentPasswordLabel": "Gjeldende passord",
+      "newPasswordLabel": "Nytt passord",
+      "confirmNewPasswordLabel": "Bekreft passord",
+      "successToast": {
+        "title": "Passord oppdatert",
+        "description": "Passordet ble oppdatert. Ved neste pålogging bruker du det nye passordet."
+      },
+      "alert": {
+        "securityWarning": {
+          "title": "Sikkerhetsadvarsel",
+          "description": "Kontoen din har ikke angitt noe passord, du har logget på med en leverandør. Passord anbefales generelt ikke, men kan angis hvis du vil bruke passordbasert pålogging."
+        }
+      },
+      "submitButton": "Lagre",
+      "errors": {
+        "wrong_password": "Eksisterende passord er feil",
+        "unknown_error": "Feil ved innstilling av passord"
+      }
+    },
+    "add-organization-form": {
+      "title": "Legg til organisasjon",
+      "nameLabel": "Organisasjonsnavn",
+      "namePlaceholder": "Acme Inc",
+      "nameDescription": "Skriv inn organisasjonsnavnet ditt",
+      "successToast": {
+        "title": "Organisasjon opprettet",
+        "description": "{name} ble opprettet"
+      },
+      "submitButton": "Opprett organisasjon",
+      "errors": { "unknown_error": "Kunne ikke opprette organisasjon" }
+    },
+    "forgot-password-form": {
+      "title": "Glemt passord",
+      "description": "Vi sender deg en e-post med instruksjoner",
+      "emailLabel": "E-post",
+      "resetPasswordButton": "Tilbakestill passord",
+      "emailSentToast": {
+        "title": "E-post sendt",
+        "description": "Åpne e-posten din og følg instruksjonene"
+      },
+      "loginText": "Har du allerede en konto?",
+      "loginLink": "Logg inn",
+      "errors": {
+        "unknown_error": "Kunne ikke tilbakestille passordet. Prøv igjen",
+        "account_not_found": "Finner ikke kontoen",
+        "account_has_no_password": "Kontoen har ikke passord, vennligst logg på med leverandøren du brukte for denne e-posten."
+      }
+    },
+    "login-form": {
+      "title": "Logg inn",
+      "description": "Logg på kontoen din",
+      "emailLabel": "E-post",
+      "passwordLabel": "Passord",
+      "forgotPassword": "Glemt passord?",
+      "loginButton": "Logg inn",
+      "errors": {
+        "notVerified": "Kontoen er ikke validert ennå, gå til e-posten din og valider kontoen din.",
+        "invalidCredentials": "Ugyldig legitimasjon"
+      },
+      "notVerifiedDialog": {
+        "title": "Kontoen er ikke bekreftet ennå",
+        "body": "Kontoen din er ikke bekreftet ennå, sjekk e-posten din. Hvis du ikke har mottatt en e-post, sjekk spam eller prøv å sende bekreftelses-e-posten på nytt.",
+        "cancelButton": "Lukk",
+        "actionButton": "Send bekreftelses-e-post på nytt"
+      },
+      "loginWithProvider": "Logg inn med",
+      "noAccountText": "Har du ikke en konto?",
+      "registerLink": "Register"
+    },
+    "password-reset-form": {
+      "title": "Tilbakestill passord",
+      "description": "Tilbakestill passordet ditt",
+      "passwordLabel": "Nytt passord",
+      "confirmPasswordLabel": "Bekreft passord",
+      "resetButton": "Tilbakestill passord",
+      "toast": {
+        "success": {
+          "title": "Suksess",
+          "description": "Passordtilbakestilling vellykket, logg på med ditt nye passord"
+        },
+        "error": { "title": "Feil" }
+      },
+      "errors": {
+        "missing_password_reset_token": "Tilbakestillingstoken eksisterer ikke",
+        "reset_token_expired": "Token for tilbakestilling av passord er utløpt"
+      }
+    },
+    "register-form": {
+      "title": "Register",
+      "description": "Kom i gang gratis",
+      "nameLabel": "Ditt fulle navn",
+      "emailLabel": "E-post",
+      "passwordLabel": "Passord",
+      "confirmPasswordLabel": "Bekreft passord",
+      "registerButton": "Register",
+      "toast": {
+        "verificationEmailSent": {
+          "title": "Bekreftelses-e-post sendt",
+          "description": "For å logge inn, gå til e-posten din og bekreft kontoen din."
+        },
+        "error": { "title": "Feil" }
+      },
+      "loginText": "Har du allerede en konto?",
+      "loginLink": "Logg inn",
+      "errors": {
+        "missing_verification": "Kontoen er ikke bekreftet.",
+        "account_exist": "Du har allerede en konto registrert på denne e-posten"
+      }
+    },
+    "user-verification-form": {
+      "title": "Bekreft kontoen",
+      "instructions": {
+        "valid": "Bekreft kontoen din på {appName} ved å klikke på Bekreft konto nedenfor.",
+        "invalid": "Vennligst lukk dette vinduet."
+      },
+      "verifyButton": "Bekreft kontoen",
+      "toast": {
+        "verified": {
+          "title": "Konto bekreftet.",
+          "description": "Du kan logge inn."
+        },
+        "verificationTokenResent": {
+          "description": "Bekreftelsestokenet ditt er sendt. Lukk dette vinduet."
+        }
+      },
+      "confirmDialog": {
+        "verificationExpired": {
+          "title": "Bekreftelsen har utløpt",
+          "body": "Bekreftelseslenken din er utløpt. Du kan sende en ny bekreftelses-e-post nedenfor.",
+          "cancelButton": "Lukk",
+          "actionButton": "Send bekreftelses-e-post på nytt"
+        }
+      },
+      "errors": {
+        "token_does_not_exist": "Bekreftelsestoken finnes ikke, allerede bekreftet?",
+        "token_expired": "Bekreftelsestoken er utløpt",
+        "unknown_error": "Serverfeil"
+      }
+    }
+  },
+  "emails": {
+    "": {
+      "subject": "Forespørsel om tilbakestilling av passord på {appName}",
+      "preview": "Glemt passordforespørsel",
+      "hello": "Hei {name}!",
+      "message": "Du eller noen andre har bedt om å endre passord på {appName}",
+      "instructions": "Tilbakestill passordet ditt nedenfor:",
+      "resetButton": "Tilbakestill passord"
+    },
+    "reset-password": {
+      "subject": "Forespørsel om tilbakestilling av passord på {appName}",
+      "preview": "Glemt passordforespørsel",
+      "hello": "Hei {name}!",
+      "message": "Du eller noen andre har bedt om å endre passord på {appName}",
+      "instructions": "Tilbakestill passordet ditt nedenfor:",
+      "resetButton": "Tilbakestill passord"
+    },
+    "welcome-registration": {
+      "subject": "Bekreft kontoen din på {appName}",
+      "preview": "Bekreft kontoen din på {appName}",
+      "hello": "Hei {name}!",
+      "message": "Du har opprettet en konto på {appName}. Du må bekrefte kontoen før du kan logge på.",
+      "instructions": "Bekreft kontoen din nedenfor:",
+      "verifyButton": "Bekreft kontoen"
+    },
+    "organization-invitation": {
+      "subject": "Du har blitt invitert til å bli med i organisasjonen {organizationName} på {appName}",
+      "preview": "Du har blitt invitert til å bli med i organisasjonen {organizationName} på {appName}",
+      "instructions": "For å godta invitasjonen, klikk på lenken nedenfor.",
+      "acceptInvitation": "Godta invitasjonen"
+    }
+  },
+  "actions": {
+    "resendVerificationToken": {
+      "errors": {
+        "account_not_found": "Brukeren går ikke ut",
+        "no_password": "Brukeren har ingen legitimasjon",
+        "email_not_verified": "Brukeren er allerede bekreftet",
+        "unknown_error": "Serverfeil"
+      }
+    }
+  },
+  "components": {
+    "members-list": {
+      "table": {
+        "types": { "member": "Medlem", "invite": "Invitasjon" },
+        "actions": {
+          "change-role": {
+            "label": "Endre rolle",
+            "toast": {
+              "success": "Endret rolle"
+            }
+          },
+          "invite": {
+            "confirm": {
+              "title": "Bekreft fjerning",
+              "body": "Er du sikker på at du vil fjerne {email} fra organisasjonen?",
+              "action": "Bekreft",
+              "cancel": "Avbryt"
+            },
+            "toast": { "success": "Invitasjon for {email} er tilbakekalt." },
+            "button": { "revoke": "Opphev" }
+          },
+          "member": {
+            "button": { "remove": "Fjerne" },
+            "toast": { "success": "Fjernet medlem {email} fra organisasjonen." }
+          }
+        }
+      },
+      "errors": {
+        "invitation": { "unknown_error": "Feil ved fjerning av invitasjonen" },
+        "member": {
+          "unknown_error": "Feil ved fjerning av medlem",
+          "remove_self": "Du kan ikke fjerne deg selv fra organisasjonen.",
+          "member_not_found": "Medlem ikke funnet",
+          "change_role_self": "Du kan ikke endre rolle på deg selv."
+        }
+      }
+    },
+    "theme-mode-toggle": {
+      "light_mode": "Lyst tema",
+      "toggle_theme": "Bytt tema",
+      "dark_mode": "Mørkt tema",
+      "system": "System"
+    },
+    "organization-selector": {
+      "dropdown": { "placeholder": "Velg organisasjon" },
+      "settingsLabel": "Organisasjonsinnstillinger",
+      "dialog": {
+        "addButton": "Legg til organisasjon",
+        "title": "Legg til ny organisasjon"
+      }
+    }
+  },
+  "layout": {
+    "toggleNavMenu": "Bytt navigasjonsmeny",
+    "toggleUserMenu": "Bytt brukermeny",
+    "manageProfile": "Administrer profil",
+    "signOut": "Logg ut",
+    "menu": { "dashboard": "Dashbord", "members": "Medlemmer" },
+    "account": {
+      "title": "Min konto",
+      "menu": {
+        "dashboard": "Tilbake til dashbordet",
+        "profile": "Profil",
+        "change-password": "Endre passord"
+      }
+    }
+  }
+}

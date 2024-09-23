@@ -12,12 +12,14 @@ import { uploadOrganizationLogo } from "@/uploads";
 import { Organization } from "@prisma/client";
 import { useOrganization } from "@/hooks/use-organization";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function LogoUploader({
   organization,
 }: {
   organization: Organization;
 }) {
+  const t = useTranslations("forms.logo-uploader");
   const { sasToken } = useOrganization();
   const { toast } = useToast();
   const router = useRouter();
@@ -42,7 +44,7 @@ export default function LogoUploader({
                 ref.current?.reset();
                 router.refresh();
                 toast({
-                  description: "Updated logo",
+                  description: t("toastMessages.success.description"),
                 });
               } else {
                 if (res.validation) {
@@ -102,9 +104,7 @@ export default function LogoUploader({
           </Label>
         </form>
       </div>
-      <p className="text-sm text-muted-foreground">
-        Click the pencil to change your logo
-      </p>
+      <p className="text-sm text-muted-foreground">{t("instructions")}</p>
     </div>
   );
 }

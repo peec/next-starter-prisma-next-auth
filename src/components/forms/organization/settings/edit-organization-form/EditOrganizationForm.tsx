@@ -19,14 +19,18 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { editOrganizationFormSchema } from "@/components/forms/organization/settings/edit-organization-form/form";
 import { editOrganizationSettings } from "@/components/forms/organization/settings/edit-organization-form/actions";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function EditOrganizationForm({
   organization,
 }: {
   organization: Organization;
 }) {
+  const t = useTranslations("forms.edit-organization-form");
   const { toast } = useToast();
   const router = useRouter();
+  useI18nZodErrors();
   const form = useForm<z.infer<typeof editOrganizationFormSchema>>({
     resolver: zodResolver(editOrganizationFormSchema),
     values: {
@@ -38,7 +42,7 @@ export default function EditOrganizationForm({
     if (result.success) {
       router.refresh();
       toast({
-        description: "Updated organization settings",
+        description: t("toastMessages.success.description"),
       });
     } else {
       toast({
@@ -56,17 +60,22 @@ export default function EditOrganizationForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Organization name</FormLabel>
+                <FormLabel>{t("fields.name.label")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Acme Inc" {...field} />
+                  <Input
+                    placeholder={t("fields.name.placeholder")}
+                    {...field}
+                  />
                 </FormControl>
-                <FormDescription>Name of your organization</FormDescription>
+                <FormDescription>
+                  {t("fields.name.description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <div>
-            <Button type="submit">Save</Button>
+            <Button type="submit">{t("buttons.submit")}</Button>
           </div>
         </div>
       </form>

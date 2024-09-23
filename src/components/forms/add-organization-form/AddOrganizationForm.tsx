@@ -18,10 +18,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { addOrganizaitonSchema } from "@/components/forms/add-organization-form/form";
 import { addOrganization } from "@/components/forms/add-organization-form/actions";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function AddOrganizationForm() {
+  const t = useTranslations("forms.add-organization-form");
   const { toast } = useToast();
   const router = useRouter();
+  useI18nZodErrors();
   const form = useForm<z.infer<typeof addOrganizaitonSchema>>({
     resolver: zodResolver(addOrganizaitonSchema),
     defaultValues: {
@@ -34,10 +38,10 @@ export default function AddOrganizationForm() {
       router.refresh();
       router.push(`/dashboard/${result.organization.slug}`);
       toast({
-        title: "Organization created",
+        title: t("successToast.title"),
         description: (
           <p>
-            <strong>{result.organization.name}</strong> created successfully
+            {t("successToast.description", { name: result.organization.name })}
           </p>
         ),
       });
@@ -57,16 +61,16 @@ export default function AddOrganizationForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Organization name</FormLabel>
+                <FormLabel>{t("nameLabel")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Acme Inc" {...field} />
+                  <Input placeholder={t("namePlaceholder")} {...field} />
                 </FormControl>
-                <FormDescription>Enter your organization name</FormDescription>
+                <FormDescription>{t("nameDescription")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Create Organization</Button>
+          <Button type="submit">{t("submitButton")}</Button>
         </div>
       </form>
     </Form>

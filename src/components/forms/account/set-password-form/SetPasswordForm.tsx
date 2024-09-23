@@ -20,14 +20,18 @@ import React from "react";
 import { LockOpen } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function SetPasswordForm({
   hasPassword,
 }: {
   hasPassword: boolean;
 }) {
+  const t = useTranslations("forms.set-password-form");
   const router = useRouter();
   const { toast } = useToast();
+  useI18nZodErrors();
   const form = useForm<z.infer<typeof setPasswordFormSchema>>({
     resolver: zodResolver(setPasswordFormSchema),
     defaultValues: {
@@ -40,9 +44,8 @@ export default function SetPasswordForm({
     const result = await updatePassword(values);
     if (result.success) {
       toast({
-        title: "Password updated",
-        description:
-          "Password was updated successfully. On next login use the new password.",
+        title: t("successToast.title"),
+        description: t("successToast.description"),
       });
       form.reset();
       router.refresh();
@@ -63,7 +66,7 @@ export default function SetPasswordForm({
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current password</FormLabel>
+                  <FormLabel>{t("currentPasswordLabel")}</FormLabel>
                   <FormControl>
                     <Input type="password" {...field} />
                   </FormControl>
@@ -75,11 +78,9 @@ export default function SetPasswordForm({
           {!hasPassword && (
             <Alert>
               <LockOpen className="h-4 w-4" />
-              <AlertTitle>Security warning</AlertTitle>
+              <AlertTitle>{t("alert.securityWarning.title")}</AlertTitle>
               <AlertDescription>
-                Your account does not have any password set, you have logged in
-                using a provider. Passwords are generally not recommended, but
-                can be set if you want to use password based login.
+                {t("alert.securityWarning.description")}
               </AlertDescription>
             </Alert>
           )}
@@ -88,7 +89,7 @@ export default function SetPasswordForm({
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New password</FormLabel>
+                <FormLabel>{t("newPasswordLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -101,7 +102,7 @@ export default function SetPasswordForm({
             name="confirmNewPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm password</FormLabel>
+                <FormLabel>{t("confirmNewPasswordLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -110,7 +111,7 @@ export default function SetPasswordForm({
             )}
           />
           <div>
-            <Button type="submit">Save</Button>
+            <Button type="submit">{t("submitButton")}</Button>
           </div>
         </div>
       </form>

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -21,15 +21,19 @@ import {
   ForgotPasswordFormDataSchema,
 } from "@/components/forms/auth/forgot-password-form/schema";
 import { handleForgotPasswordAction } from "@/components/forms/auth/forgot-password-form/actions";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function ForgotPasswordForm({
   callbackUrl,
 }: {
   callbackUrl: string;
 }) {
+  const t = useTranslations("forms.forgot-password-form");
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const [disabled, setDisabled] = useState(false);
+  useI18nZodErrors();
   const form = useForm<ForgotPasswordFormDataInputs>({
     resolver: zodResolver(ForgotPasswordFormDataSchema),
     defaultValues: { email: "" },
@@ -44,8 +48,8 @@ export default function ForgotPasswordForm({
       if (res.success) {
         setDisabled(true);
         toast({
-          title: "E-mail sent",
-          description: "Open your email and follow the instructions",
+          title: t("emailSentToast.title"),
+          description: t("emailSentToast.description"),
         });
       } else {
         form.setError("email", {
@@ -60,9 +64,9 @@ export default function ForgotPasswordForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(processForm)}>
         <div className="grid gap-2 text-center">
-          <h1 className="text-3xl font-bold">Forgot password</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-balance text-muted-foreground">
-            We will send you an e-mail with instructions
+            {t("description")}
           </p>
         </div>
         <div className="grid gap-4 mt-4">
@@ -71,7 +75,7 @@ export default function ForgotPasswordForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>{t("emailLabel")}</FormLabel>
                 <FormControl>
                   <Input type="text" {...field} />
                 </FormControl>
@@ -84,17 +88,17 @@ export default function ForgotPasswordForm({
             type="submit"
             className="w-full"
           >
-            Reset password
+            {t("resetPasswordButton")}
             {pending && <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Already have an account?
+          {t("loginText")}{" "}
           <Link
             href={`/login?callbackUrl=${callbackUrl}`}
             className="underline"
           >
-            Login
+            {t("loginLink")}
           </Link>
         </div>
       </form>

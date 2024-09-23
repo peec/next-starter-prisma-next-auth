@@ -10,10 +10,12 @@ import {
   RegisterFormDataSchema,
 } from "@/components/forms/auth/register-form/schema";
 import { generateResetToken } from "@/lib/crypto";
+import { getTranslations } from "next-intl/server";
 
 export async function handleRegisterAction(
   values: RegisterFormDataInputs | unknown,
 ) {
+  const t = await getTranslations("forms.register-form");
   const inputRequest = RegisterFormDataSchema.safeParse(values);
   if (!inputRequest.success) {
     return {
@@ -30,13 +32,13 @@ export async function handleRegisterAction(
     if (existingUser.emailVerified === null) {
       return {
         success: false,
-        error: "Account is not verified.",
+        error: t("errors.missing_verification"),
         errorCode: "missing_verification",
       };
     }
     return {
       success: false,
-      error: "You already have an account registered to this email",
+      error: t("errors.account_exist"),
       errorCode: "account_exist",
     };
   }
@@ -66,7 +68,7 @@ export async function handleRegisterAction(
       await sendEmail({
         to: data.email,
         subject: `Verify your account on ${APP_NAME}`,
-        body: WelcomeRegistration({
+        body: await WelcomeRegistration({
           name: data.name,
           verificationToken: verificationToken,
         }),

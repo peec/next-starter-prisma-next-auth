@@ -5,6 +5,7 @@ import { Organization, OrganizationMemberRole } from "@prisma/client";
 import slugify from "slugify";
 import { addOrganizaitonSchema } from "@/components/forms/add-organization-form/form";
 import { securedAction } from "@/lib/action-utils";
+import { getTranslations } from "next-intl/server";
 
 export const addOrganization = securedAction<
   typeof addOrganizaitonSchema,
@@ -13,6 +14,7 @@ export const addOrganization = securedAction<
     success: true;
   }
 >(addOrganizaitonSchema, async function (data, { user }) {
+  const t = await getTranslations("forms.add-organization-form");
   try {
     const slugged = slugify(data.name.substring(0, 50), {
       lower: true,
@@ -40,7 +42,7 @@ export const addOrganization = securedAction<
     console.error(error);
     return {
       success: false,
-      error: "Could not create organization",
+      error: t("errors.unknown_error"),
     };
   }
 });

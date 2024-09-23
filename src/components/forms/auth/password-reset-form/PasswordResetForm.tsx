@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
@@ -22,11 +21,15 @@ import {
   PasswordResetFormDataInputs,
   PasswordResetFormSchema,
 } from "@/components/forms/auth/password-reset-form/schema";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function PasswordResetForm({ token }: { token: string }) {
+  const t = useTranslations("forms.password-reset-form");
   const [pending, startTransaction] = useTransition();
   const { toast } = useToast();
   const router = useRouter();
+  useI18nZodErrors();
   const form = useForm<PasswordResetFormDataInputs>({
     resolver: zodResolver(PasswordResetFormSchema),
     defaultValues: { password: "", confirm_password: "" },
@@ -40,13 +43,13 @@ export default function PasswordResetForm({ token }: { token: string }) {
       if (res.success) {
         router.push(`/login`);
         toast({
-          title: "Success",
-          description: "Password reset success, login using your new password",
+          title: t("toast.success.title"),
+          description: t("toast.success.description"),
         });
       } else {
         toast({
           variant: "destructive",
-          title: "Error",
+          title: t("toast.error.title"),
           description: res.error,
         });
       }
@@ -57,9 +60,9 @@ export default function PasswordResetForm({ token }: { token: string }) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(processForm)}>
         <div className="grid gap-2 text-center">
-          <h1 className="text-3xl font-bold">Reset password</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-balance text-muted-foreground">
-            Reset your password
+            {t("description")}
           </p>
         </div>
         <div className="grid gap-4 mt-4">
@@ -68,7 +71,7 @@ export default function PasswordResetForm({ token }: { token: string }) {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New password</FormLabel>
+                <FormLabel>{t("passwordLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -81,7 +84,7 @@ export default function PasswordResetForm({ token }: { token: string }) {
             name="confirm_password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm password</FormLabel>
+                <FormLabel>{t("confirmPasswordLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -90,7 +93,7 @@ export default function PasswordResetForm({ token }: { token: string }) {
             )}
           />
           <Button type="submit" className="w-full" disabled={pending}>
-            Reset password
+            {t("resetButton")}
             {pending && <ReloadIcon className="ml-2 h-4 w-4 animate-spin" />}
           </Button>
         </div>

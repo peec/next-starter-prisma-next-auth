@@ -22,8 +22,9 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { Organization, OrganizationMemberRole } from "@prisma/client";
 import AddOrganizationForm from "@/components/forms/add-organization-form/AddOrganizationForm";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useOrganization } from "@/hooks/use-organization";
+import { useTranslations } from "next-intl";
 
 export default function OrganizationSelector({
   organization,
@@ -32,18 +33,13 @@ export default function OrganizationSelector({
   organization: Organization;
   organizations: Organization[];
 }) {
+  const t = useTranslations("components.organization-selector");
   const currentOrg = useOrganization();
   const router = useRouter();
-  const [newOrgName, setNewOrgName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleSelectOrg = (slug: string) => {
     router.push(`/dashboard/${slug}`);
-  };
-
-  const handleAddOrg = () => {
-    if (newOrgName.trim()) {
-    }
   };
 
   return (
@@ -51,7 +47,7 @@ export default function OrganizationSelector({
       <div className="flex gap-2">
         <Select value={organization.slug} onValueChange={handleSelectOrg}>
           <SelectTrigger>
-            <SelectValue placeholder="Select organization" />
+            <SelectValue placeholder={t("dropdown.placeholder")} />
           </SelectTrigger>
           <SelectContent>
             {organizations.map((org) => (
@@ -66,7 +62,7 @@ export default function OrganizationSelector({
           <Button
             size="icon"
             variant="ghost"
-            title="Organization settings"
+            title={t("settingsLabel")}
             asChild
           >
             <Link href={`/dashboard/${organization.slug}/settings`}>
@@ -80,12 +76,12 @@ export default function OrganizationSelector({
         <DialogTrigger asChild>
           <Button variant="outline" className="w-full">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add Organization
+            {t("dialog.addButton")}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Organization</DialogTitle>
+            <DialogTitle>{t("dialog.title")}</DialogTitle>
           </DialogHeader>
           <AddOrganizationForm />
         </DialogContent>

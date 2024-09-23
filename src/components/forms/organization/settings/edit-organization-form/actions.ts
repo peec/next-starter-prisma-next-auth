@@ -4,10 +4,12 @@ import { prisma } from "@/lib/prisma";
 import { editOrganizationFormSchema } from "@/components/forms/organization/settings/edit-organization-form/form";
 import { securedOrganizationAction } from "@/lib/action-utils";
 import { OrganizationMemberRole } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
 export const editOrganizationSettings = securedOrganizationAction(
   editOrganizationFormSchema,
   async (data, { organization }) => {
+    const t = await getTranslations("forms.edit-organization-form");
     try {
       await prisma.organization.update({
         data: {
@@ -24,7 +26,7 @@ export const editOrganizationSettings = securedOrganizationAction(
       console.error(error);
       return {
         success: false,
-        error: "Error creating invitation",
+        error: t("errors.unknown_error"),
       };
     }
   },

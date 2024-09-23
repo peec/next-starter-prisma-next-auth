@@ -1,0 +1,142 @@
+{
+  "zod": {
+    "errors": {
+      "invalid_type": "Forventet {expected}, mottok {received}",
+      "invalid_type_received_undefined": "Obligatorisk",
+      "invalid_literal": "Ugyldig bokstavelig verdi, forventet {expected}",
+      "unrecognized_keys": "Ukjent(e) nøkkel(er) i objekt: {keys}",
+      "invalid_union": "Ugyldig inndata",
+      "invalid_union_discriminator": "Ugyldig diskriminatorverdi. Forventet {options}",
+      "invalid_enum_value": "Ugyldig verdi. Forventet {options}, mottok {received}",
+      "invalid_arguments": "Ugyldige argumenter",
+      "invalid_return_type": "Ugyldig returntype",
+      "invalid_date": "Ugyldig dato",
+      "custom": "Ugyldig inndata",
+      "invalid_intersection_types": "Kryssresultater kunne ikke slås sammen",
+      "not_multiple_of": "Tallet må være et multiplum av {multipleOf}",
+      "not_finite": "Tallet må være endelig",
+      "invalid_string": {
+        "duration": "Ugyldig {validation}",
+        "time": "Ugyldig {validation}",
+        "base64": "Ugyldig {validation}",
+        "nanoid": "Ugyldig {validation}",
+        "date": "Ugyldig {validation}",
+        "email": "Ugyldig {validation}",
+        "emoji": "Ugyldig {validation}",
+        "url": "Ugyldig {validation}",
+        "uuid": "Ugyldig {validation}",
+        "ulid": "Ugyldig {validation}",
+        "ip": "Ugyldig {validation}",
+        "cuid": "Ugyldig {validation}",
+        "cuid2": "Ugyldig {validation}",
+        "regex": "Ugyldig",
+        "datetime": "Ugyldig {validation}",
+        "startsWith": "Ugyldig inndata: må starte med \"{startsWith}\"",
+        "endsWith": "Ugyldig inndata: må slutte med \"{endsWith}\""
+      },
+      "too_small": {
+        "array": {
+          "exact": "{path, select, missingTranslation {Array} andre {{path}}} må inneholde nøyaktig {minimum} element(er)",
+          "inclusive": "{path, select, missingTranslation {Array} annen {{path}}} må inneholde minst {minimum} element(er)",
+          "not_inclusive": "{path, select, missingTranslation {Array} andre {{path}}} må inneholde mer enn {minimum} element(er)"
+        },
+        "string": {
+          "exact": "Må inneholde nøyaktig {minimum} tegn",
+          "inclusive": "Må inneholde minst {minimum} tegn",
+          "not_inclusive": "Må inneholde mer enn {minimum} tegn"
+        },
+        "number": {
+          "exact": "Må være nøyaktig {minimum}",
+          "inclusive": "Må være større enn eller lik {minimum}",
+          "not_inclusive": "Må være større enn {minimum}"
+        },
+        "bigint": {
+          "exact": "Må være nøyaktig {minimum}",
+          "inclusive": "Må være større enn eller lik {minimum}",
+          "not_inclusive": "Må være større enn {minimum}"
+        },
+        "set": {
+          "exact": "Ugyldig inndata",
+          "inclusive": "Ugyldig inndata",
+          "not_inclusive": "Ugyldig inndata"
+        },
+        "date": {
+          "exact": "Datoen må være nøyaktig {minimum, date, short}",
+          "inclusive": "Datoen må være større enn eller lik {minimum, date, short}",
+          "not_inclusive": "Datoen må være større enn {minimum, date, short}"
+        }
+      },
+      "too_big": {
+        "array": {
+          "exact": "Må inneholde nøyaktig {maximum} element(er)",
+          "inclusive": "Må inneholde maksimalt {maximum} element(er)",
+          "not_inclusive": "Må inneholde mindre enn {maximum} element(er)"
+        },
+        "string": {
+          "exact": "Må inneholde nøyaktig {maximum} tegn",
+          "inclusive": "Må inneholde maksimalt {maximum} tegn",
+          "not_inclusive": "Må inneholde mindre enn {maximum} tegn"
+        },
+        "number": {
+          "exact": "Må være nøyaktig {maximum}",
+          "inclusive": "Må være mindre enn eller lik {maximum}",
+          "not_inclusive": "Må være mindre enn {maximum}"
+        },
+        "bigint": {
+          "exact": "Må være nøyaktig {maximum}",
+          "inclusive": "Må være mindre enn eller lik {maximum}",
+          "not_inclusive": "Må være mindre enn {maximum}"
+        },
+        "set": {
+          "exact": "Ugyldig inndata",
+          "inclusive": "Ugyldig inndata",
+          "not_inclusive": "Ugyldig inndata"
+        },
+        "date": {
+          "exact": "Datoen må være nøyaktig {maximum, date, short}",
+          "inclusive": "Datoen må være mindre enn eller lik {maximum, date, short}",
+          "not_inclusive": "Datoen må være mindre enn {maximum, date, short}"
+        }
+      }
+    },
+    "validations": {
+      "email": "e-post",
+      "date": "dato",
+      "nanoid": "nanoid",
+      "base64": "base64",
+      "time": "tid",
+      "duration": "varighet",
+      "emoji": "emoji",
+      "url": "url",
+      "uuid": "uuid",
+      "ulid": "ulid",
+      "ip": "opp",
+      "cuid": "cuid",
+      "cuid2": "cuid2",
+      "regex": "regulært uttrykk",
+      "datetime": "dato og klokkeslett"
+    },
+    "types": {
+      "function": "funksjon",
+      "number": "tall",
+      "string": "streng",
+      "nan": "nan",
+      "integer": "heltall",
+      "float": "flyte",
+      "boolean": "boolsk",
+      "date": "dato",
+      "bigint": "bigint",
+      "undefined": "udefinert",
+      "symbol": "symbol",
+      "null": "null",
+      "array": "array",
+      "object": "objekt",
+      "unknown": "ukjent",
+      "promise": "løfte",
+      "void": "ugyldig",
+      "never": "aldri",
+      "map": "kart",
+      "set": "sett"
+    }
+  }
+}

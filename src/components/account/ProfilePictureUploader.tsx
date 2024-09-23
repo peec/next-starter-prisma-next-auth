@@ -10,8 +10,10 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { uploadProfilePicture } from "@/uploads";
+import { useTranslations } from "next-intl";
 
 export default function ProfilePictureUploader() {
+  const t = useTranslations("forms.profile-picture-uploader");
   const { user, sasToken } = useUser();
   const { toast } = useToast();
   const router = useRouter();
@@ -33,7 +35,7 @@ export default function ProfilePictureUploader() {
                 ref.current?.reset();
                 router.refresh();
                 toast({
-                  description: "Updated profile picture",
+                  description: t("toastMessages.success.description"),
                 });
               } else {
                 if (res.validation) {
@@ -86,9 +88,7 @@ export default function ProfilePictureUploader() {
           </Label>
         </form>
       </div>
-      <p className="text-sm text-muted-foreground">
-        Click the pencil to change your avatar
-      </p>
+      <p className="text-sm text-muted-foreground">{t("instructions")}</p>
     </div>
   );
 }

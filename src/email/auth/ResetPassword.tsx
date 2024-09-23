@@ -10,31 +10,34 @@ import {
 } from "@/email/EmailLayout";
 import { APP_NAME } from "@/settings";
 import { PasswordResetToken } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
-export const OrganizationInvitation = ({
+export const ResetPassword = async ({
   token,
   name,
 }: {
   token: PasswordResetToken;
   name: string;
-}) => (
-  <EmailLayout>
-    <Preview>Forgot password request</Preview>
-    <Text style={title}>Hello {name}!</Text>
-    <Text style={text}>
-      You or someone else have requested to change passsword on {APP_NAME}
-    </Text>
+}) => {
+  const t = await getTranslations("emails.reset-password");
 
-    <Section style={section}>
-      <Text style={text}>Reset your password below</Text>
-      <Link
-        href={`${emailBaseUrl}/reset-password?token=${token.token}`}
-        style={button}
-      >
-        Reset password
-      </Link>
-    </Section>
-  </EmailLayout>
-);
+  return (
+    <EmailLayout>
+      <Preview>{t("preview")}</Preview>
+      <Text style={title}>{t("hello", { name })}</Text>
+      <Text style={text}>{t("message", { appName: APP_NAME })}</Text>
 
-export default OrganizationInvitation;
+      <Section style={section}>
+        <Text style={text}>{t("instructions")}</Text>
+        <Link
+          href={`${emailBaseUrl}/reset-password?token=${token.token}`}
+          style={button}
+        >
+          {t("resetButton")}
+        </Link>
+      </Section>
+    </EmailLayout>
+  );
+};
+
+export default ResetPassword;

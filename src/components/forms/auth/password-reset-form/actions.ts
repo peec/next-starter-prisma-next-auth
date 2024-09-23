@@ -7,11 +7,13 @@ import {
   PasswordResetFormDataInputs,
   PasswordResetFormSchema,
 } from "@/components/forms/auth/password-reset-form/schema";
+import { getTranslations } from "next-intl/server";
 
 export async function handleResetPasswordAction(
   token: string,
   values: PasswordResetFormDataInputs | unknown,
 ) {
+  const t = await getTranslations("forms.password-reset-form");
   const inputRequest = PasswordResetFormSchema.safeParse(values);
   if (!inputRequest.success) {
     return {
@@ -29,14 +31,14 @@ export async function handleResetPasswordAction(
   if (!passwordResetToken) {
     return {
       success: false,
-      error: "Reset token does not exist",
+      error: t("errors.missing_password_reset_token"),
     };
   }
 
   if (isPasswordResetTokenExpired(passwordResetToken)) {
     return {
       success: false,
-      error: "Reset password token expired",
+      error: t("errors.reset_token_expired"),
     };
   }
 

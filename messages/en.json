@@ -1,0 +1,430 @@
+{
+  "organizationRoles": {
+    "OWNER": "Owner",
+    "MEMBER": "Member"
+  },
+  "pages": {
+    "dashboard": {
+      "errors": {
+        "error_create_org": "Could not create organization, please reload this page."
+      }
+    },
+    "dashboard/error/unauthorized": {
+      "message": "You are unauthorized for this action"
+    },
+    "dashboard/settings": {
+      "title": "Organization settings",
+      "description": "Manage your organization here"
+    },
+    "dashboard/members": {
+      "title": "Manage members",
+      "description": "Manage existing users and invite new ones to your organization.",
+      "buttons": {
+        "inviteMember": "Invite member"
+      },
+      "inviteDialog": {
+        "title": "Invite New User",
+        "description": "Fill in the details to invite a new user to your organization."
+      }
+    },
+    "forgot-password": {
+      "title": "Forgot password"
+    },
+    "login": {
+      "title": "Login"
+    },
+    "register": {
+      "title": "Register"
+    },
+    "reset-password": {
+      "title": "Reset Password"
+    },
+    "user-verification": {
+      "title": "User Verification"
+    },
+    "invitation": {
+      "errors": {
+        "id_not_found": "Invalid invitation",
+        "invite_not_found": "Invitation error, could not join organization",
+        "unknown_error": "Invitation error, could not join organization"
+      }
+    },
+    "error/no-access": {
+      "title": "You have no access to this organization"
+    },
+    "account": {
+      "title": "Account settings",
+      "description": "Make changes to your profile here.",
+      "connectedAccounts": {
+        "title": "Connected accounts",
+        "empty": "No connected accounts",
+        "connected": "Connected"
+      }
+    },
+    "account/password": {
+      "title": "Change password",
+      "description": "Change or set a password for your account."
+    }
+  },
+  "uploads": {
+    "validation": {
+      "image-type": "File format must be either jpg, jpeg, webp or png.",
+      "size": "File can't be bigger than {maxSizeMb}MB."
+    }
+  },
+  "forms": {
+    "update-profile-form": {
+      "form": {
+        "fullName": {
+          "label": "Full name",
+          "placeholder": "My name"
+        },
+        "email": {
+          "label": "Email",
+          "note": "Your email cannot be changed"
+        },
+        "button": {
+          "submit": "Save"
+        }
+      },
+      "toast": {
+        "success": {
+          "title": "Profile updated"
+        }
+      },
+      "errors": {
+        "unknown_error": "Error while updating profile"
+      }
+    },
+    "profile-picture-uploader": {
+      "instructions": "Click the pencil to change your avatar",
+      "toastMessages": {
+        "success": {
+          "description": "Updated avatar"
+        }
+      }
+    },
+    "logo-uploader": {
+      "instructions": "Click the pencil to change your logo",
+      "toastMessages": {
+        "success": {
+          "description": "Updated organization logo"
+        }
+      }
+    },
+    "edit-organization-form": {
+      "fields": {
+        "name": {
+          "label": "Organization name",
+          "placeholder": "Acme Inc",
+          "description": "Name of your organization"
+        }
+      },
+      "buttons": {
+        "submit": "Save"
+      },
+      "toastMessages": {
+        "success": {
+          "description": "Updated organization settings"
+        }
+      },
+      "errors": {
+        "unknown_error": "Error creating invitation"
+      }
+    },
+    "invite-member-form": {
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "me@mail.com",
+      "emailDescription": "Enter the e-mail of the person to invite.",
+      "roleLabel": "Role",
+      "roleDescription": "OWNER role has full access. MEMBER role has limited access",
+      "roleSelectPlaceholder": "Select a role",
+      "roles": {
+        "OWNER": "Owner",
+        "MEMBER": "Member"
+      },
+      "successToast": {
+        "title": "Member invited",
+        "description": "Member invited to the team, an email has been sent."
+      },
+      "submitButton": "Invite User",
+      "errors": {
+        "unknown_error": "Error creating invitation"
+      }
+    },
+    "set-password-form": {
+      "title": "Set Password",
+      "currentPasswordLabel": "Current password",
+      "newPasswordLabel": "New password",
+      "confirmNewPasswordLabel": "Confirm password",
+      "successToast": {
+        "title": "Password updated",
+        "description": "Password was updated successfully. On next login use the new password."
+      },
+      "alert": {
+        "securityWarning": {
+          "title": "Security warning",
+          "description": "Your account does not have any password set, you have logged in using a provider. Passwords are generally not recommended, but can be set if you want to use password based login."
+        }
+      },
+      "submitButton": "Save",
+      "errors": {
+        "wrong_password": "Existing password is wrong",
+        "unknown_error": "Error setting password"
+      }
+    },
+    "add-organization-form": {
+      "title": "Add Organization",
+      "nameLabel": "Organization name",
+      "namePlaceholder": "Acme Inc",
+      "nameDescription": "Enter your organization name",
+      "successToast": {
+        "title": "Organization created",
+        "description": "{name} created successfully"
+      },
+      "submitButton": "Create Organization",
+      "errors": {
+        "unknown_error": "Could not create organization"
+      }
+    },
+    "forgot-password-form": {
+      "title": "Forgot password",
+      "description": "We will send you an e-mail with instructions",
+      "emailLabel": "E-mail",
+      "resetPasswordButton": "Reset password",
+      "emailSentToast": {
+        "title": "E-mail sent",
+        "description": "Open your email and follow the instructions"
+      },
+      "loginText": "Already have an account?",
+      "loginLink": "Login",
+      "errors": {
+        "unknown_error": "Could not reset password, please try again",
+        "account_not_found": "Account not found",
+        "account_has_no_password": "Account does not have password, please login with the provider you used for this email."
+      }
+    },
+    "login-form": {
+      "title": "Login",
+      "description": "Login to your account",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot password?",
+      "loginButton": "Login",
+      "errors": {
+        "notVerified": "Account not validated yet, go to your email and validate your account.",
+        "invalidCredentials": "Invalid credentials"
+      },
+      "notVerifiedDialog": {
+        "title": "Account not verified yet",
+        "body": "Your account is not verified yet, check your e-mail. If you have not received an email, check spam or try resending the verification email.",
+        "cancelButton": "Close",
+        "actionButton": "Resend verification e-mail"
+      },
+      "loginWithProvider": "Login with",
+      "noAccountText": "Don't have an account?",
+      "registerLink": "Register"
+    },
+    "password-reset-form": {
+      "title": "Reset password",
+      "description": "Reset your password",
+      "passwordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "resetButton": "Reset password",
+      "toast": {
+        "success": {
+          "title": "Success",
+          "description": "Password reset success, login using your new password"
+        },
+        "error": {
+          "title": "Error"
+        }
+      },
+      "errors": {
+        "missing_password_reset_token": "Reset token does not exist",
+        "reset_token_expired": "Reset password token expired"
+      }
+    },
+    "register-form": {
+      "title": "Register",
+      "description": "Get started for free",
+      "nameLabel": "Your full name",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm password",
+      "registerButton": "Register",
+      "toast": {
+        "verificationEmailSent": {
+          "title": "Verification e-mail sent",
+          "description": "In order to login, go to your email and verify your account."
+        },
+        "error": {
+          "title": "Error"
+        }
+      },
+      "loginText": "Already have an account?",
+      "loginLink": "Login",
+      "errors": {
+        "missing_verification": "Account is not verified.",
+        "account_exist": "You already have an account registered to this email"
+      }
+    },
+    "user-verification-form": {
+      "title": "Verify account",
+      "instructions": {
+        "valid": "Verify your account on {appName} by clicking Verify account below.",
+        "invalid": "Please close this window."
+      },
+      "verifyButton": "Verify account",
+      "toast": {
+        "verified": {
+          "title": "Account verified.",
+          "description": "You may login."
+        },
+        "verificationTokenResent": {
+          "description": "Your verification token has been sent, please close this window."
+        }
+      },
+      "confirmDialog": {
+        "verificationExpired": {
+          "title": "Verification expired",
+          "body": "Your verification link has expired, you may send a new verification email below.",
+          "cancelButton": "Close",
+          "actionButton": "Resend verification e-mail"
+        }
+      },
+      "errors": {
+        "token_does_not_exist": "Verification token does not exist, already verified?",
+        "token_expired": "Verification token expired",
+        "unknown_error": "Server error"
+      }
+    }
+  },
+  "emails": {
+    "": {
+      "subject": "Password reset request on {appName}",
+      "preview": "Forgot password request",
+      "hello": "Hello {name}!",
+      "message": "You or someone else have requested to change passsword on {appName}",
+      "instructions": "Reset your password below:",
+      "resetButton": "Reset password"
+    },
+    "reset-password": {
+      "subject": "Password reset request on {appName}",
+      "preview": "Forgot password request",
+      "hello": "Hello {name}!",
+      "message": "You or someone else have requested to change passsword on {appName}",
+      "instructions": "Reset your password below:",
+      "resetButton": "Reset password"
+    },
+    "welcome-registration": {
+      "subject": "Verify your account on {appName}",
+      "preview": "Verify your account on {appName}",
+      "hello": "Hello {name}!",
+      "message": "You have successfully created an account on {appName}, you will need to verify your account before you can log in.",
+      "instructions": "Verify your account below:",
+      "verifyButton": "Verify account"
+    },
+    "organization-invitation": {
+      "subject": "You have been invited to join organization {organizationName} on {appName}",
+      "preview": "You have been invited to join organization {organizationName} on {appName}",
+      "instructions": "To accept the invitation click the link below.",
+      "acceptInvitation": "Accept invitation"
+    }
+  },
+  "actions": {
+    "resendVerificationToken": {
+      "errors": {
+        "account_not_found": "User does not exit",
+        "no_password": "User has no credentails",
+        "email_not_verified": "User is already verified",
+        "unknown_error": "Server error"
+      }
+    }
+  },
+  "components": {
+    "members-list": {
+      "table": {
+        "types": {
+          "member": "Member",
+          "invite": "Invitation"
+        },
+        "actions": {
+          "change-role": {
+            "label": "Change role",
+            "toast": {
+              "success": "Changed role"
+            }
+          },
+          "invite": {
+            "confirm": {
+              "title": "Confirm removal",
+              "body": "Are you sure you want to remove {email} from the organization?",
+              "action": "Confirm",
+              "cancel": "Cancel"
+            },
+            "toast": {
+              "success": "Invitation for {email} revoked."
+            },
+            "button": {
+              "revoke": "Revoke"
+            }
+          },
+          "member": {
+            "button": {
+              "remove": "Remove"
+            },
+            "toast": {
+              "success": "Removed member {email} from the organization."
+            }
+          }
+        }
+      },
+      "errors": {
+        "invitation": {
+          "unknown_error": "Error removing invitation"
+        },
+        "member": {
+          "unknown_error": "Error removing member",
+          "remove_self": "You can not remove your self from the organization.",
+          "member_not_found": "Member not found",
+          "change_role_self": "You can not change the role of your self"
+        }
+      }
+    },
+    "theme-mode-toggle": {
+      "light_mode": "Light mode",
+      "toggle_theme": "Toggle theme",
+      "dark_mode": "Dark mode",
+      "system": "System"
+    },
+    "organization-selector": {
+      "dropdown": {
+        "placeholder": "Select organization"
+      },
+      "settingsLabel": "Organization settings",
+      "dialog": {
+        "addButton": "Add Organization",
+        "title": "Add New Organization"
+      }
+    }
+  },
+  "layout": {
+    "toggleNavMenu": "Toggle navigation menu",
+    "toggleUserMenu": "Toggle user menu",
+    "manageProfile": "Manage profile",
+    "signOut": "Sign Out",
+    "menu": {
+      "dashboard": "Dashboard",
+      "members": "Members"
+    },
+    "account": {
+      "title": "My account",
+      "menu": {
+        "dashboard": "Back to dashboard",
+        "profile": "Profile",
+        "change-password": "Change password"
+      }
+    }
+  }
+}

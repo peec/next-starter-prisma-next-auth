@@ -1,4 +1,4 @@
-import z, { ZodError, ZodIssue, ZodSchema } from "zod";
+import z, { ZodIssue, ZodSchema } from "zod";
 import { authenticated, authorizedOrganization } from "@/auth";
 import { OrganizationMemberRole } from "@prisma/client";
 
@@ -10,7 +10,7 @@ export function securedOrganizationAction<
     error: string;
   },
 >(
-  schema: T,
+  schemaOrFn: T | (() => Promise<T>),
   action: (
     data: z.infer<T>,
     organizationContext: Awaited<ReturnType<typeof authorizedOrganization>>,
@@ -26,7 +26,10 @@ export function securedOrganizationAction<
     values: unknown,
   ): Promise<
     | (SuccessData & { success: true })
-    | (ErrorData & { success: false; validation?: ZodIssue[] })
+    | (ErrorData & {
+        success: false;
+        validation?: ZodIssue[];
+      })
   > {
     try {
       const organizationContext = await authorizedOrganization(
@@ -34,11 +37,16 @@ export function securedOrganizationAction<
         options.requiredRoles,
         { action: true },
       );
+
+      const schema =
+        typeof schemaOrFn === "function" ? await schemaOrFn() : schemaOrFn;
+
       const inputRequest = await schema.safeParseAsync(values);
       if (!inputRequest.success) {
         return {
           success: false,
           error: inputRequest.error.message,
+          validation: inputRequest.error.issues,
         };
       }
       const data = inputRequest.data;
@@ -62,7 +70,7 @@ export function securedAction<
     error: string;
   },
 >(
-  schema: T,
+  schemaOrFn: T | (() => Promise<T>),
   action: (
     data: z.infer<T>,
     auth: Awaited<ReturnType<typeof authenticated>>,
@@ -78,11 +86,15 @@ export function securedAction<
     try {
       const auth = await authenticated({ action: true });
 
+      const schema =
+        typeof schemaOrFn === "function" ? await schemaOrFn() : schemaOrFn;
+
       const inputRequest = await schema.safeParseAsync(values);
       if (!inputRequest.success) {
         return {
           success: false,
           error: inputRequest.error.message,
+          validation: inputRequest.error.issues,
         };
       }
       const data = inputRequest.data;
@@ -106,7 +118,7 @@ export function securedFormAction<
     error: string;
   },
 >(
-  schema: T,
+  schemaOrFn: T | (() => Promise<T>),
   action: (
     data: z.infer<T>,
     auth: Awaited<ReturnType<typeof authenticated>>,
@@ -124,6 +136,8 @@ export function securedFormAction<
     try {
       const auth = await authenticated({ action: true });
 
+      const schema =
+        typeof schemaOrFn === "function" ? await schemaOrFn() : schemaOrFn;
       const inputRequest = await schema.safeParseAsync(values);
       if (!inputRequest.success) {
         return {

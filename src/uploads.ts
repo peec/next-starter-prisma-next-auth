@@ -7,13 +7,17 @@ import {
   securedFormAction,
   securedOrganizationAction,
 } from "@/lib/action-utils";
+import { getTranslations } from "next-intl/server";
+import { mb } from "@/lib/uploader/validation";
 
-export const uploadProfilePicture = securedFormAction(
-  zfd.formData({
+// validation for profile images, single image uploads etc.
+const singleImageValidation = async () => {
+  const t = await getTranslations("uploads.validation");
+  return zfd.formData({
     file: zfd
       .file()
-      .refine((file) => file.size < 5000000, {
-        message: "File can't be bigger than 5MB.",
+      .refine((file) => file.size < mb(5), {
+        message: t("size", { maxSizeMb: 5 }),
       })
       .refine(
         (file) =>
@@ -21,10 +25,14 @@ export const uploadProfilePicture = securedFormAction(
             file.type,
           ),
         {
-          message: "File format must be either jpg, jpeg, webp or png.",
+          message: t("image-type"),
         },
       ),
-  }),
+  });
+};
+
+export const uploadProfilePicture = securedFormAction(
+  singleImageValidation,
   async (data, { user }) => {
     const files = await uploadFiles("global", [data.file], {
       // compress and convert to webp.
@@ -46,22 +54,7 @@ export const uploadProfilePicture = securedFormAction(
 );
 
 export const uploadOrganizationLogo = securedOrganizationAction(
-  zfd.formData({
-    file: zfd
-      .file()
-      .refine((file) => file.size < 5000000, {
-        message: "File can't be bigger than 5MB.",
-      })
-      .refine(
-        (file) =>
-          ["image/jpeg", "image/png", "image/jpg", "image/webp"].includes(
-            file.type,
-          ),
-        {
-          message: "File format must be either jpg, jpeg, webp or png.",
-        },
-      ),
-  }),
+  singleImageValidation,
   async (data, { organization }) => {
     const files = await uploadFiles(
       { type: "org", id: organization.id },

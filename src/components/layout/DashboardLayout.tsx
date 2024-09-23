@@ -1,15 +1,15 @@
-import { Home, Search, Users } from "lucide-react";
+import { Home, Users } from "lucide-react";
 
 import { ReactNode } from "react";
 import { Organization, OrganizationMember, User } from "@prisma/client";
 import { MenuItem } from "@/components/layout/types";
 import OrganizationSelector from "@/components/layout/OrganizationSelector";
 import { AuthenticatedLayout } from "@/components/layout/AuthenticatedLayout";
-import { Input } from "@/components/ui/input";
 import { SasToken } from "@/lib/uploader/types";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 
-export function DashboardLayout({
+export async function DashboardLayout({
   children,
   organization,
   user,
@@ -24,17 +24,18 @@ export function DashboardLayout({
   organizations: Organization[];
   authSasToken: SasToken | null;
 }) {
+  const t = await getTranslations("layout");
   const orgUrl = `/dashboard/${organization.slug}`;
   const menu: MenuItem[] = [
     {
       href: orgUrl,
-      name: "Dashboard",
+      name: t("menu.dashboard"),
       iconDesktop: <Home className="h-4 w-4" />,
       iconMobile: <Home className="h-5 w-5" />,
     },
     {
       href: `${orgUrl}/members`,
-      name: "Members",
+      name: t("menu.members"),
       iconDesktop: <Users className="h-4 w-4" />,
       iconMobile: <Users className="h-5 w-5" />,
       roles: ["OWNER"],

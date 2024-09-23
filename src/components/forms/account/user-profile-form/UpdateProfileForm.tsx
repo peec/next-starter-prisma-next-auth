@@ -19,11 +19,15 @@ import { updateProfileFormSchema } from "@/components/forms/account/user-profile
 import { updateProfile } from "@/components/forms/account/user-profile-form/actions";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/hooks/use-user";
+import { useTranslations } from "next-intl";
+import { useI18nZodErrors } from "@/lib/zod/useI18nZodErrors";
 
 export default function UpdateProfileForm() {
+  const t = useTranslations("forms.update-profile-form");
   const { toast } = useToast();
   const router = useRouter();
   const { user } = useUser();
+  useI18nZodErrors();
   const form = useForm<z.infer<typeof updateProfileFormSchema>>({
     resolver: zodResolver(updateProfileFormSchema),
     defaultValues: {
@@ -35,7 +39,7 @@ export default function UpdateProfileForm() {
     if (result.success) {
       router.refresh();
       toast({
-        title: "Profile updated",
+        title: t("toast.success.title"),
       });
     } else {
       toast({
@@ -53,21 +57,24 @@ export default function UpdateProfileForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full name</FormLabel>
+                <FormLabel>{t("form.fullName.label")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="My name" {...field} />
+                  <Input
+                    placeholder={t("form.fullName.placeholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("form.email.label")}</Label>
           <Input id="email" type="email" defaultValue={user.email} disabled />
           <p className="text-sm text-muted-foreground">
-            Your email cannot be changed
+            {t("form.email.note")}
           </p>
           <div>
-            <Button type="submit">Save</Button>
+            <Button type="submit">{t("form.button.submit")}</Button>
           </div>
         </div>
       </form>

@@ -3,10 +3,12 @@
 import { prisma } from "@/lib/prisma";
 import { securedAction } from "@/lib/action-utils";
 import { updateProfileFormSchema } from "@/components/forms/account/user-profile-form/form";
+import { getTranslations } from "next-intl/server";
 
 export const updateProfile = securedAction(
   updateProfileFormSchema,
   async function (data, { user }) {
+    const t = await getTranslations("forms.update-profile-form");
     try {
       await prisma.user.update({
         data: {
@@ -23,7 +25,7 @@ export const updateProfile = securedAction(
       console.error(error);
       return {
         success: false,
-        error: "Error while updating profile",
+        error: t("errors.unknown_error"),
       };
     }
   },

@@ -10,10 +10,13 @@ import {
 } from "@/components/forms/auth/forgot-password-form/schema";
 import { isPasswordResetTokenExpired } from "@/lib/db";
 import { generateResetToken } from "@/lib/crypto";
+import { getTranslations } from "next-intl/server";
 
 export async function handleForgotPasswordAction(
   values: ForgotPasswordFormDataInputs | unknown,
 ) {
+  const t = await getTranslations("forms.forgot-password-form");
+  const tEmail = await getTranslations("emails.reset-password");
   const inputRequest = ForgotPasswordFormDataSchema.safeParse(values);
   if (!inputRequest.success) {
     return {
@@ -28,14 +31,15 @@ export async function handleForgotPasswordAction(
   if (!user) {
     return {
       success: false,
-      error: "Account not found",
+      errorCode: "account_not_found",
+      error: t("errors.account_not_found"),
     };
   }
   if (user.password === null) {
     return {
       success: false,
-      error:
-        "Account does not have password, please login with the provider you used for this email.",
+      errorCode: "account_has_no_password",
+      error: t("errors.account_has_no_password"),
     };
   }
 
@@ -50,8 +54,8 @@ export async function handleForgotPasswordAction(
       try {
         await sendEmail({
           to: input.email,
-          subject: `Password reset request on ${APP_NAME}`,
-          body: ResetPassword({
+          subject: tEmail("subject", { appName: APP_NAME }),
+          body: await ResetPassword({
             token: existingToken,
             name: user.name || user.email,
           }),
@@ -60,7 +64,8 @@ export async function handleForgotPasswordAction(
         console.error(error);
         return {
           success: false,
-          error: "Could not reset password, please try again",
+          errorCode: "unknown_error",
+          error: t("errors.unknown_error"),
         };
       }
       return {
@@ -85,15 +90,16 @@ export async function handleForgotPasswordAction(
       });
       await sendEmail({
         to: input.email,
-        subject: `Password reset request on ${APP_NAME}`,
-        body: ResetPassword({ token, name: user.name || user.email }),
+        subject: tEmail("subject", { appName: APP_NAME }),
+        body: await ResetPassword({ token, name: user.name || user.email }),
       });
     });
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      error: "Could not reset password, please try again",
+      errorCode: "unknown_error",
+      error: t("errors.unknown_error"),
     };
   }
 
