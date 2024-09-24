@@ -109,30 +109,33 @@ model OrganizationSubscription {
 }
 
 model Organization {
-  id                  String                    @id @default(cuid())
-  name                String                    @db.VarChar(50)
-  slug                String                    @unique @db.VarChar(50)
-  ownerId             String
-  customerId          Int?                      @unique
-  subscriptionId      String?
-  user                User                      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  subscription        OrganizationSubscription? @relation(fields: [subscriptionId], references: [id], onUpdate: NoAction)
-  organizationMembers OrganizationMember[]
-  invites             OrganizationInvite[]
-  image               String?
+  id                   String                    @id @default(cuid())
+  name                 String                    @db.VarChar(50)
+  slug                 String                    @unique @db.VarChar(50)
+  ownerId              String
+  customerId           Int?                      @unique
+  subscriptionId       String?
+  user                 User                      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  subscription         OrganizationSubscription? @relation(fields: [subscriptionId], references: [id], onUpdate: NoAction)
+  organizationMembers  OrganizationMember[]
+  invites              OrganizationInvite[]
+  image                String?
+  OrganizationDocument OrganizationDocument[]
 
   @@index([slug])
 }
 
 model OrganizationMember {
-  id           String                 @id @default(cuid())
-  orgId        String
-  userId       String
-  role         OrganizationMemberRole @default(OWNER)
-  organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
-  user         User                   @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  id                   String                 @id @default(cuid())
+  orgId                String
+  userId               String
+  role                 OrganizationMemberRole @default(OWNER)
+  organization         Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
+  user                 User                   @relation(fields: [userId], references: [id], onUpdate: NoAction)
+  OrganizationDocument OrganizationDocument[]
 
   @@unique([orgId, userId])
+  @@index([orgId])
 }
 
 enum OrganizationMemberRole {
@@ -149,4 +152,28 @@ model OrganizationInvite {
   organization Organization           @relation(fields: [orgId], references: [id], onUpdate: NoAction)
 
   @@unique([orgId, email])
+  @@index([orgId])
+}
+
+model OrganizationDocument {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orgId          String
+  memberId       String
+  fileName       String
+  fileUrl        String
+  azureBlobName  String
+  azureContainer String
+  size           Int
+  type           String
+
+  indexing         Boolean            @default(false)
+  indexingProgress Int                @default(0)
+  indexed          Boolean            @default(false)
+  organization     Organization       @relation(fields: [orgId], references: [id], onUpdate: NoAction)
+  owner            OrganizationMember @relation(fields: [memberId], references: [id], onUpdate: NoAction)
+
+  @@index([orgId])
 }

@@ -9,6 +9,7 @@ import {
 } from "@/lib/action-utils";
 import { getTranslations } from "next-intl/server";
 import { mb } from "@/lib/uploader/validation";
+import z from "zod";
 
 // validation for profile images, single image uploads etc.
 const singleImageValidation = async () => {
@@ -43,7 +44,7 @@ export const uploadProfilePicture = securedFormAction(
     });
     if (files[0].success) {
       await prisma.user.update({
-        data: { image: files[0].url },
+        data: { image: files[0].data.url },
         where: { id: user.id },
       });
     }
@@ -70,9 +71,49 @@ export const uploadOrganizationLogo = securedOrganizationAction(
     );
     if (files[0].success) {
       await prisma.organization.update({
-        data: { image: files[0].url },
+        data: { image: files[0].data.url },
         where: { id: organization.id },
       });
+    }
+    return {
+      success: true,
+    };
+  },
+);
+
+const orgDocumentsValidation = async () => {
+  const t = await getTranslations("uploads.validation");
+  // 1 mb limit for testing purposes..
+  const fileValidator = zfd.file().refine((file) => file.size < mb(1), {
+    message: t("size", { maxSizeMb: 1 }),
+  });
+  return zfd.formData({
+    files: z.union([z.array(fileValidator), fileValidator]),
+  });
+};
+
+export const uploadOrganizationDocuments = securedOrganizationAction(
+  orgDocumentsValidation,
+  async (data, { organization, organizationMember }) => {
+    const files = await uploadFiles(
+      { type: "org", id: organization.id },
+      Array.isArray(data.files) ? data.files : [data.files],
+    );
+    for (const file of files) {
+      if (file.success) {
+        await prisma.organizationDocument.create({
+          data: {
+            orgId: organization.id,
+            memberId: organizationMember.id,
+            fileName: file.file.name,
+            fileUrl: file.data.url,
+            azureBlobName: file.data.blobName,
+            azureContainer: file.data.containerName,
+            size: file.file.size,
+            type: file.file.type,
+          },
+        });
+      }
     }
     return {
       success: true,

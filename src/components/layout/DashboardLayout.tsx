@@ -1,4 +1,4 @@
-import { Home, Users } from "lucide-react";
+import { FileIcon, Home, Users } from "lucide-react";
 
 import { ReactNode } from "react";
 import { Organization, OrganizationMember, User } from "@prisma/client";
@@ -32,6 +32,13 @@ export async function DashboardLayout({
       name: t("menu.dashboard"),
       iconDesktop: <Home className="h-4 w-4" />,
       iconMobile: <Home className="h-5 w-5" />,
+    },
+    {
+      href: `${orgUrl}/documents`,
+      name: t("menu.documents"),
+      iconDesktop: <FileIcon className="h-4 w-4" />,
+      iconMobile: <FileIcon className="h-5 w-5" />,
+      roles: ["OWNER", "MEMBER"],
     },
     {
       href: `${orgUrl}/members`,

@@ -10,6 +10,7 @@ import { serverEnv } from "@/env.server.mjs";
 import { SasToken } from "@/lib/uploader/types";
 import { uuidv7 } from "uuidv7";
 import sharp, { Sharp } from "sharp";
+import { container } from "@/email/EmailLayout";
 
 const credentials = () => {
   if (
@@ -109,16 +110,17 @@ export async function uploadFiles(
       const blobClient = containerClient.getBlockBlobClient(newFileName);
       const options = { blobHTTPHeaders: { blobContentType: fileType } };
 
-      await blobClient.uploadData(buffer, options);
+      const blob = await blobClient.uploadData(buffer, options);
+
       const url = `https://${serverEnv.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${containerName}/${newFileName}`;
-      return url;
+      return { url, blobName: newFileName, containerName: containerName };
     }),
   );
   return promise.map((p, index) =>
     p.status === "fulfilled"
       ? ({
           success: true,
-          url: p.value,
+          data: p.value,
           index,
           file: files[index],
         } satisfies FileUploadSuccess)
@@ -139,7 +141,11 @@ export function isValidAzureFileUrl(url?: string | null) {
   );
 }
 type FileUploadSuccess = {
-  url: string;
+  data: {
+    url: string;
+    blobName: string;
+    containerName: string;
+  };
   success: true;
   index: number;
   file: File;

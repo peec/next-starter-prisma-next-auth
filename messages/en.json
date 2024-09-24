@@ -16,6 +16,18 @@
       "title": "Organization settings",
       "description": "Manage your organization here"
     },
+    "dashboard/documents": {
+      "search": "Search documents ...",
+      "title": "Documents",
+      "description": "Upload word, pdfs, excel or text documents here",
+      "buttons": {
+        "uploadFiles": "Upload files"
+      },
+      "uploadDialog": {
+        "title": "Upload Files",
+        "description": "Upload PDF, word or excel documents"
+      }
+    },
     "dashboard/members": {
       "title": "Manage members",
       "description": "Manage existing users and invite new ones to your organization.",
@@ -69,7 +81,7 @@
   "uploads": {
     "validation": {
       "image-type": "File format must be either jpg, jpeg, webp or png.",
-      "size": "File can't be bigger than {maxSizeMb}MB."
+      "size": "File can't be bigger than {maxSizeMb} mb"
     }
   },
   "forms": {
@@ -343,6 +355,44 @@
     }
   },
   "components": {
+    "drop-zone": {
+      "drop": {
+        "title-single": "Upload a File",
+        "description-single": "Drop your file here or click to select a file",
+        "title-multi": "Upload files",
+        "description-multi": "Drop your files here or click to select a file",
+        "title-loading": "Uploading ...",
+        "description-loading": "Please wait, this might take a moment"
+      },
+      "button": {
+        "multi": "Select Files",
+        "single": "Select File"
+      },
+      "toasts": {
+        "success": "Files uploaded"
+      }
+    },
+    "documents-list": {
+      "no-documents": "No documents found",
+      "document-item": {
+        "actions": "Actions",
+        "open": "Open",
+        "remove-document": "Remove document"
+      },
+      "remove-dialog": {
+        "title": "Are you sure?",
+        "body": "Are you sure you want to delete {fileName}?",
+        "cancelButton": "Cancel",
+        "actionButton": "Remove"
+      },
+      "remove-toast": {
+        "success": "Removed document"
+      },
+      "errors": {
+        "unknown_error": "Could not upload documents",
+        "document_not_found": "Document not found"
+      }
+    },
     "members-list": {
       "table": {
         "types": {
@@ -416,7 +466,8 @@
     "signOut": "Sign Out",
     "menu": {
       "dashboard": "Dashboard",
-      "members": "Members"
+      "members": "Members",
+      "documents": "Documents"
     },
     "account": {
       "title": "My account",

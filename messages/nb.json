@@ -16,6 +16,18 @@
       "title": "Organisasjonsinnstillinger",
       "description": "Administrer organisasjonen din her"
     },
+    "dashboard/documents": {
+      "search": "Søk i dokumenter ...",
+      "title": "Dokumenter",
+      "description": "Last opp word, pdfs, excel eller tekst- dokumenter her",
+      "buttons": {
+        "uploadFiles": "Last opp filer"
+      },
+      "uploadDialog": {
+        "title": "Last opp filer",
+        "description": "Last opp word, pdfs, excel eller tekst- dokumenter her"
+      }
+    },
     "dashboard/members": {
       "title": "Administrer medlemmer",
       "description": "Administrer eksisterende brukere og inviter nye til organisasjonen din.",
@@ -57,7 +69,7 @@
   "uploads": {
     "validation": {
       "image-type": "Filformatet må være enten jpg, jpeg, webp eller png.",
-      "size": "Filen kan ikke være større enn {maxSizeMb}MB."
+      "size": "Filen kan ikke være større enn {maxSizeMb} mb"
     }
   },
   "forms": {
@@ -297,6 +309,44 @@
     }
   },
   "components": {
+    "drop-zone": {
+      "drop": {
+        "title-single": "Last opp fil",
+        "description-single": "Dra filen inn her eller trykk for å laste opp",
+        "title-multi": "Last opp filer",
+        "description-multi": "Dra filene inn her eller trykk for å laste opp",
+        "title-loading": "Laster opp ...",
+        "description-loading": "Vennligst vent, dette kan ta litt tid"
+      },
+      "button": {
+        "multi": "Velg filer",
+        "single": "Velg fil"
+      },
+      "toasts": {
+        "success": "Filer ble lastet opp"
+      }
+    },
+    "documents-list": {
+      "no-documents": "Ingen dokumenter funnet",
+      "document-item": {
+        "actions": "Handlinger",
+        "open": "Åpne",
+        "remove-document": "Slett dokument"
+      },
+      "remove-dialog": {
+        "title": "Er du sikker?",
+        "body": "Er du sikker på at du vil slette {fileName}?",
+        "cancelButton": "Angre",
+        "actionButton": "Slett"
+      },
+      "remove-toast": {
+        "success": "Removed document"
+      },
+      "errors": {
+        "unknown_error": "Could not upload documents",
+        "document_not_found": "Document not found"
+      }
+    },
     "members-list": {
       "table": {
         "types": { "member": "Medlem", "invite": "Invitasjon" },
@@ -353,7 +403,11 @@
     "toggleUserMenu": "Bytt brukermeny",
     "manageProfile": "Administrer profil",
     "signOut": "Logg ut",
-    "menu": { "dashboard": "Dashbord", "members": "Medlemmer" },
+    "menu": {
+      "dashboard": "Dashbord",
+      "members": "Medlemmer",
+      "documents": "Dokumenter"
+    },
     "account": {
       "title": "Min konto",
       "menu": {
